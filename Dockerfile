@@ -17,14 +17,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure and install PHP extensions required for CodeIgniter 4
+# (mbstring, pdo_sqlite, and sqlite3 are already bundled in the official php:8.3 image)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         intl \
-        mbstring \
         mysqli \
         pdo_mysql \
-        pdo_sqlite \
-        sqlite3 \
         gd \
         zip \
         opcache
