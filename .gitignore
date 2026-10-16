@@ -1,0 +1,8 @@
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+backend/writable/cocoir.db
+backend/writable/cocoir.db-journal
+backend/writable/cocoir.db-wal
+backend/writable/cocoir.db-shm
