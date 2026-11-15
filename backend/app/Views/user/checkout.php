@@ -19,7 +19,7 @@ $total    = $subtotal + $shipping;
 <html lang="en">
 <?= $this->include('components/head', ['title' => 'Checkout — COCOIR']) ?>
 
-<body class="flex flex-col bg-coco-cream min-h-screen font-body text-coco-brown">
+<body class="site-store flex flex-col bg-coco-cream min-h-screen font-body text-coco-brown">
 <?= $this->include('components/header') ?>
 
 <style>

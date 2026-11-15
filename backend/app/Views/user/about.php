@@ -10,12 +10,7 @@
 <?= $this->include('components/head', ['title' => 'About Us — COCOIR Coconut Coir Co.']) ?>
 
 <style>
-    .fiber-bg {
-        background: repeating-linear-gradient(
-            108deg, transparent, transparent 2px,
-            rgba(139,94,60,0.035) 2px, rgba(139,94,60,0.035) 4px
-        ), #FAF3E8;
-    }
+
 
     /* Scroll reveal */
     .reveal        { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
@@ -25,30 +20,6 @@
     .reveal-right        { opacity:0; transform:translateX(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
     .reveal-right.visible{ opacity:1; transform:translateX(0); }
 
-    /* Full-width hero banner */
-    .about-banner {
-        position: relative;
-        width: 100%;
-        min-height: 520px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        background-color: #3B2314; /* fallback if image not loaded */
-    }
-    .about-banner .banner-bg {
-        position: absolute;
-        inset: 0;
-        background-image: url('/images/bgheaderr.jpg'); /* ← replace with your image */
-        background-size: cover;
-        background-position: center;
-        filter: brightness(0.6) blur(3px);
-        transform: scale(1.05); 
-        transition: transform 8s ease;
-    }
-    .about-banner:hover .banner-bg {
-        transform: scale(1.03);
-    }
     /* Mission section image */
     .mission-img {
         position: relative;
@@ -63,15 +34,7 @@
     }
     .mission-img:hover img { transform: scale(1.04); }
 
-    /* Value card */
-    .value-card { transition: all 0.3s ease; }
-    .value-card:hover { transform: translateY(-5px); box-shadow: 0 20px 44px rgba(59,35,20,0.12); }
-
-    /* Team card */
-    .team-card { transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.35s ease; }
-    .team-card:hover { transform: translateY(-10px); box-shadow: 0 32px 60px rgba(59,35,20,0.14); }
-    .team-card:hover .member-photo { transform: scale(1.06); }
-    .member-photo { transition: transform 0.5s ease; }
+    .member-photo { transition: transform .3s ease; }
 
     /* Timeline */
     .tl-line { position:absolute; left:19px; top:44px; bottom:-24px; width:2px;
@@ -86,41 +49,15 @@
     .stat-num { font-variant-numeric: tabular-nums; }
 </style>
 
-<body class="flex flex-col bg-coco-cream min-h-screen font-body text-coco-brown">
+<body class="site-store flex flex-col bg-coco-cream min-h-screen font-body text-coco-brown">
 <?= $this->include('components/header') ?>
 
 
 <!-- ══════════════════════ FULL-WIDTH BANNER HERO ══════════════════════ -->
-<section class="about-banner">
-    <!-- Background image — put your photo at /images/about-banner.jpg -->
-    <div class="banner-bg"></div>
-
-   <!-- Gradient vignette bottom -->
-<div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-coco-brown/60 to-transparent"></div>
-<!-- Gradient vignette top — makes header readable -->
-<div class="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-black/50 to-transparent"></div>
-    <!-- Content -->
-    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-36 pb-16">        
-        <!-- Eyebrow -->
-        <div class="inline-flex items-center gap-2 border border-white/30 rounded-full px-5 py-1.5 mb-8 backdrop-blur-sm">
-            <span class="w-1.5 h-1.5 bg-coco-orange rounded-full"></span>
-            <span class="text-white/80 text-xs font-bold tracking-[0.3em] uppercase">Coconut Coir Co. · Philippines</span>
-        </div>
-
-        <h1 class="font-display font-black text-white leading-none mb-6"
-            style="font-size: clamp(3.5rem, 12vw, 8rem); letter-spacing: -0.02em;">
-            ABOUT US
-        </h1>
-
-        <p class="text-white/70 text-lg sm:text-xl font-light tracking-widest">
-            Our Mission &nbsp;·&nbsp; Our Promise &nbsp;·&nbsp; Our Commitment to Quality
-        </p>
-
-        <!-- Scroll cue -->
-        <div class="mt-12 flex flex-col items-center gap-2 text-white/40">
-            <span class="text-xs tracking-widest uppercase font-semibold">Scroll to explore</span>
-            <div class="w-px h-12 bg-gradient-to-b from-white/40 to-transparent"></div>
-        </div>
+<section class="page-banner">
+    <div class="page-banner-inner">
+        <div><p class="store-eyebrow">Our story · Philippine made</p><h1>Rooted in nature.<br>Made with purpose.</h1><p>Meet the people turning coconut husks into thoughtful essentials for everyday living.</p><a href="#team" class="store-button store-button-outline">Meet our team</a></div>
+        <img src="<?= base_url('images/crafting.png') ?>" alt="Crafting with natural coconut coir">
     </div>
 </section>
 
@@ -326,11 +263,11 @@
             <p class="text-coco-orange font-bold text-xs tracking-[0.3em] uppercase mb-3">The People Behind the Husk</p>
             <h2 class="font-display font-black text-4xl sm:text-5xl text-coco-brown mb-4">Meet the Team</h2>
             <p class="text-coco-mid text-lg font-light max-w-lg mx-auto">
-                Three passionate Filipinos on a mission to make coconut coir the sustainable material of the future.
+                Four passionate Filipinos on a mission to make coconut coir the sustainable material of the future.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <?php
             $team = [
                 [
@@ -360,6 +297,15 @@
                     'bio'     => 'Industrial designer who transforms raw coir fiber into beautiful, functional products. Leads R&D for new COCOIR product lines.',
                     'social'  => ['linkedin'=>'#','facebook'=>'#','instagram'=>'#'],
                 ],
+                [
+                    'name' => 'Steven Ballesteros',
+                    'role' => 'Logistics Coordinator',
+                    'photo' => '',
+                    'initial' => 'SB',
+                    'color' => 'coco-green',
+                    'bio' => 'Coordinates order fulfillment, shipping, and delivery schedules to help bring COCOIR products from our makers to your doorstep with care.',
+                    'social' => [],
+                ],
             ];
             foreach ($team as $i => $member):
             ?>
@@ -380,7 +326,7 @@
                                 </span>
                             </div>
                             <span class="text-coco-mid text-[10px] font-semibold tracking-wide opacity-50">
-                                photo → /images/team/
+                                COCOIR
                             </span>
                         </div>
                     <?php endif; ?>

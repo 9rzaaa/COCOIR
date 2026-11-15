@@ -1,29 +1,10 @@
-// mobile menu toggle
-document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
-});
-
-// smooth scrolling for navigation links
+// Shared header owns the mobile menu and scroll state.
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+    anchor.addEventListener('click', event => {
+        const id = anchor.getAttribute('href').slice(1);
+        const target = id && document.getElementById(id);
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-});
-
-// header background on scroll
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('nav');
-    if (window.scrollY > 100) {
-        header.classList.add('bg-light-cream/95');
-    } else {
-        header.classList.remove('bg-light-cream/95');
-    }
 });

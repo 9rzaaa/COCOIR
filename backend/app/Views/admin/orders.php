@@ -51,7 +51,7 @@ $nextLabel = [
     .detail-tab.active { border-bottom-color:#E87722; color:#E87722; font-weight:700; }
 </style>
 
-<body class="bg-gray-50 font-body text-coco-brown">
+<body class="site-admin bg-gray-50 font-body text-coco-brown">
 <?= $this->include('components/admin_header') ?>
 
 <main class="admin-main px-6 py-8">

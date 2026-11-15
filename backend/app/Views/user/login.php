@@ -6,7 +6,7 @@ $old = session()->getFlashdata('old') ?? [];
 <html lang="en">
 <?= view('components/head') ?>
 
-<body class="bg-coco-cream font-body text-coco-brown">
+<body class="site-store bg-coco-cream font-body text-coco-brown">
     <?= $this->include('components/header') ?>
 
     <!-- Main Content -->

@@ -19,7 +19,7 @@
     .report-panel.active { display:block; }
 </style>
 
-<body class="bg-gray-50 font-body text-coco-brown">
+<body class="site-admin bg-gray-50 font-body text-coco-brown">
 <?= $this->include('components/admin_header') ?>
 
 <main class="admin-main px-6 py-8">

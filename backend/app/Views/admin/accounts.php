@@ -17,7 +17,7 @@ $users = $users ?? [];
 .modal-overlay.open { display:flex; }
 </style>
 
-<body class="bg-gray-50 font-body text-coco-brown">
+<body class="site-admin bg-gray-50 font-body text-coco-brown">
 <?= $this->include('components/admin_header') ?>
 
 <main class="px-6 py-8 admin-main">

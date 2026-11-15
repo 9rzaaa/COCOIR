@@ -11,18 +11,18 @@
             theme: {
                 extend: {
                     colors: {
-                        'coco-brown': '#3B2314',
-                        'coco-dark': '#5C3317',
-                        'coco-mid': '#8B5E3C',
-                        'coco-tan': '#C8956C',
-                        'coco-orange': '#E87722',
-                        'coco-amber': '#F4A940',
-                        'coco-green': '#4A7C59',
-                        'coco-leaf': '#6BAF78',
-                        'coco-sage': '#A8C5A0',
-                        'coco-cream': '#FAF3E8',
-                        'coco-sand': '#EDE0CC',
-                        'coco-white': '#FFFDF8',
+                        'coco-brown': '#202020',
+                        'coco-dark': '#363636',
+                        'coco-mid': '#727272',
+                        'coco-tan': '#b7b7b0',
+                        'coco-orange': '#252a24',
+                        'coco-amber': '#d4d9cf',
+                        'coco-green': '#55634e',
+                        'coco-leaf': '#71806a',
+                        'coco-sage': '#c5cec0',
+                        'coco-cream': '#ffffff',
+                        'coco-sand': '#f0f1ee',
+                        'coco-white': '#ffffff',
                     },
                     fontFamily: {
                         'display': ['Barlow', 'sans-serif'],
@@ -83,124 +83,5 @@
             }
         }
     </script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Lato', sans-serif;
-        }
-
-        /* Subtle grain overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
-        }
-
-        .delay-100 {
-            animation-delay: 0.1s;
-        }
-
-        .delay-200 {
-            animation-delay: 0.2s;
-        }
-
-        .delay-300 {
-            animation-delay: 0.3s;
-        }
-
-        .delay-500 {
-            animation-delay: 0.5s;
-        }
-
-        .delay-700 {
-            animation-delay: 0.7s;
-        }
-
-        .anim-hidden {
-            opacity: 0;
-        }
-
-        /* Sticky nav */
-        .nav-scrolled {
-            background: rgba(250, 243, 232, 0.96) !important;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 2px 24px rgba(59, 35, 20, 0.10);
-        }
-
-        /* Organic blobs */
-        .blob-1 {
-            border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
-        }
-
-        .blob-2 {
-            border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%;
-        }
-
-        /* Fiber texture background */
-        .fiber-bg {
-            background: repeating-linear-gradient(108deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(139, 94, 60, 0.035) 2px,
-                    rgba(139, 94, 60, 0.035) 4px), #FAF3E8;
-        }
-
-        /* Product card hover lift */
-        .product-card {
-            transition: transform 0.35s cubic-bezier(.34, 1.56, .64, 1), box-shadow 0.35s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-9px) rotate(0.4deg);
-            box-shadow: 0 28px 52px rgba(59, 35, 20, 0.16);
-        }
-
-        .badge-new {
-            background: #E87722;
-            color: #fff;
-        }
-
-        .badge-trending {
-            background: #4A7C59;
-            color: #fff;
-        }
-
-        .badge-bestseller {
-            background: #3B2314;
-            color: #FAF3E8;
-        }
-
-        /* Mobile menu */
-        #mobile-menu {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.4s ease;
-        }
-
-        #mobile-menu.open {
-            max-height: 440px;
-            opacity: 1;
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #FAF3E8;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #C8956C;
-            border-radius: 3px;
-        }
-    </style>
+<link rel="stylesheet" href="<?= base_url('css/site.css') . '?v=' . filemtime(FCPATH . 'css/site.css') ?>">
 </head>

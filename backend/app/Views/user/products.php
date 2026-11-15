@@ -21,66 +21,21 @@ $products = $products ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products — COCOIR Coconut Coir Co.</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'coco-brown':'#3B2314','coco-dark':'#5C3317','coco-mid':'#8B5E3C',
-                        'coco-tan':'#C8956C','coco-orange':'#E87722','coco-amber':'#F4A940',
-                        'coco-green':'#4A7C59','coco-leaf':'#6BAF78','coco-sage':'#A8C5A0',
-                        'coco-cream':'#FAF3E8','coco-sand':'#EDE0CC','coco-white':'#FFFDF8',
-                    },
-                    fontFamily: { 'display':['Barlow','sans-serif'], 'body':['Lato','sans-serif'] },
-                }
-            }
-        }
-    </script>
-    <style>
-        *{box-sizing:border-box}
-        body{font-family:'Lato',sans-serif}
-        body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4}
-        .nav-scrolled{background:rgba(250,243,232,0.96)!important;backdrop-filter:blur(14px);box-shadow:0 2px 24px rgba(59,35,20,.10)}
-        .fiber-bg{background:repeating-linear-gradient(108deg,transparent,transparent 2px,rgba(139,94,60,.035) 2px,rgba(139,94,60,.035) 4px),#FAF3E8}
-        .product-card{transition:transform .32s cubic-bezier(.34,1.56,.64,1),box-shadow .32s ease}
-        .product-card:hover{transform:translateY(-8px) rotate(.3deg);box-shadow:0 24px 48px rgba(59,35,20,.15)}
-        .product-card:hover .card-img{transform:scale(1.06)}
-        .card-img{transition:transform .5s ease}
-        .filter-pill{transition:all .2s ease;cursor:pointer}
-        .filter-pill.active,.filter-pill:hover{background:#E87722;color:#fff;border-color:#E87722}
-        select{appearance:none;cursor:pointer}
-        .badge-new{background:#E87722;color:#fff}
-        .badge-trending{background:#4A7C59;color:#fff}
-        .badge-bestseller{background:#3B2314;color:#FAF3E8}
-        .badge-sale{background:#F4A940;color:#3B2314}
-        .page-btn{transition:all .2s ease}
-        .page-btn.active,.page-btn:hover{background:#E87722;color:#fff;border-color:#E87722}
-        .search-input:focus{outline:none;border-color:#E87722;box-shadow:0 0 0 3px rgba(232,119,34,.15)}
-        #mobile-menu{max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease,opacity .4s ease}
-        #mobile-menu.open{max-height:440px;opacity:1}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        .fade-card{animation:fadeUp .5s ease forwards}
-        ::-webkit-scrollbar{width:6px}
-        ::-webkit-scrollbar-track{background:#FAF3E8}
-        ::-webkit-scrollbar-thumb{background:#C8956C;border-radius:3px}
-
-        /* Modal */
+<?= $this->include('components/head', ['title' => 'Products — COCOIR Coconut Coir Co.']) ?>
+<style>
+.card-img{transition:transform .3s ease}
+.filter-pill, .page-btn{cursor:pointer;transition:all .2s ease}
+.filter-pill:hover,.page-btn:hover{background:#252a24;color:#fff;border-color:#252a24}
+select{appearance:none;cursor:pointer}
+/* Modal */
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,10,5,.6);backdrop-filter:blur(6px);z-index:9997;align-items:center;justify-content:center;padding:16px}
         .modal-overlay.open{display:flex}
         .modal-img-wrap{position:relative;overflow:hidden;border-radius:24px 0 0 24px}
         @media(max-width:640px){.modal-img-wrap{border-radius:24px 24px 0 0}}
-    </style>
-</head>
 
-<body class="bg-coco-cream font-body text-coco-brown">
+</style>
+
+<body class="site-store bg-coco-cream font-body text-coco-brown">
 
 <!-- CSRF token for cart AJAX -->
 <input type="hidden" id="csrf-name"  value="<?= csrf_token() ?>">
@@ -359,15 +314,6 @@ if (flashToast) setTimeout(() => {
 }, 3500);
 
 // ── Nav scroll ──
-const header = document.getElementById('main-header');
-if (header) window.addEventListener('scroll', () => header.classList.toggle('nav-scrolled', window.scrollY > 50));
-
-// ── Mobile menu ──
-const hamburger  = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobile-menu');
-if (hamburger) hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-if (mobileMenu) mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
-
 // ── Filters ──
 let activeCategory = 'All';
 function getVisibleCards() {
@@ -394,6 +340,9 @@ document.getElementById('filter-pills').addEventListener('click', e => {
     activeCategory = btn.dataset.category;
     getVisibleCards();
 });
+const requestedCategory = new URLSearchParams(window.location.search).get('category');
+const initialFilter = [...document.querySelectorAll('#filter-pills .filter-pill')].find(button => button.dataset.category === requestedCategory);
+if (initialFilter) initialFilter.click();
 document.getElementById('search-input').addEventListener('input', getVisibleCards);
 document.getElementById('sort-select').addEventListener('change', function() {
     const grid  = document.getElementById('product-grid');

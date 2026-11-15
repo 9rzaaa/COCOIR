@@ -5,173 +5,43 @@
 
 <?= $this->include('components/head') ?>
 
-<body class="bg-coco-cream font-body text-coco-brown">
+<body class="site-store home-store bg-coco-cream font-body text-coco-brown">
 
 
     <?= $this->include('components/header') ?>
 
 
     <!-- ══════════════════════════ HERO ══════════════════════════ -->
-    <section id="home" class="relative flex items-center bg-gradient-to-br from-coco-cream via-coco-sand to-coco-cream pt-20 min-h-screen overflow-hidden">
-
-        <!-- Decorative blobs -->
-        <div class="top-10 right-0 -z-0 absolute bg-coco-orange/10 w-[480px] h-[480px] pointer-events-none blob-1"></div>
-        <div class="bottom-0 left-0 -z-0 absolute bg-coco-green/10 w-[320px] h-[320px] pointer-events-none blob-2"></div>
-        <div class="hidden lg:block top-1/2 right-20 -z-0 absolute border-[3px] border-coco-tan/25 border-dashed rounded-full w-60 h-60 animate-spin-slow pointer-events-none"></div>
-
-        <div class="z-10 relative mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full max-w-7xl">
-            <div class="items-center gap-16 grid grid-cols-1 lg:grid-cols-2">
-
-                <!-- Text Content -->
-                <div class="space-y-8">
-                    <div class="anim-hidden inline-flex items-center gap-2 bg-coco-green/10 px-4 py-1.5 border border-coco-leaf/30 rounded-full animate-fade-up">
-                        <span class="bg-coco-leaf rounded-full w-2 h-2 animate-pulse"></span>
-                        <span class="font-bold text-coco-green text-xs uppercase tracking-[0.15em]">100% Natural · Philippine-Made</span>
-                    </div>
-
-                    <h1 class="anim-hidden font-display font-black text-coco-brown text-5xl sm:text-6xl lg:text-7xl leading-[1.05] animate-fade-up delay-200">
-                        From Husk<br>
-                        <span class="text-coco-orange italic">to Craft.</span>
-                    </h1>
-
-                    <p class="anim-hidden max-w-lg font-light text-coco-mid text-lg leading-relaxed animate-fade-up delay-300">
-                        COCOIR transforms discarded coconut husks into premium eco-friendly products — for construction, gardening, and everyday living. Rooted in the Philippines, growing worldwide.
-                    </p>
-
-                    <div class="anim-hidden flex flex-wrap gap-4 animate-fade-up delay-500">
-                        <a href="<?= site_url('products') ?>" class="inline-flex items-center gap-2 bg-coco-orange hover:bg-coco-dark shadow-coco-orange/30 shadow-lg px-8 py-4 rounded-full font-bold text-white hover:scale-105 transition-all duration-300 transform">
-                            <i class="text-sm fas fa-leaf"></i> Shop Products
-                        </a>
-                        <a href="#about" class="inline-flex items-center gap-2 hover:bg-coco-brown px-8 py-4 border-2 border-coco-brown rounded-full font-bold text-coco-brown hover:text-coco-cream transition-all duration-300">
-                            Our Story <i class="fa-arrow-right text-sm fas"></i>
-                        </a>
-                    </div>
-
-                    <!-- Stats -->
-                    <div class="anim-hidden flex gap-8 pt-4 animate-fade-up delay-700">
-                        <div>
-                            <div class="font-display font-black text-coco-brown text-3xl">200+</div>
-                            <div class="font-light text-coco-mid text-sm">Products</div>
-                        </div>
-                        <div class="self-stretch bg-coco-sand w-px"></div>
-                        <div>
-                            <div class="font-display font-black text-coco-brown text-3xl">1,500+</div>
-                            <div class="font-light text-coco-mid text-sm">Customers</div>
-                        </div>
-                        <div class="self-stretch bg-coco-sand w-px"></div>
-                        <div>
-                            <div class="font-display font-black text-coco-brown text-3xl">4.8★</div>
-                            <div class="font-light text-coco-mid text-sm">Rating</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Visual -->
-                <div class="relative flex justify-center items-center">
-                    <!-- Main hero image: coco.png with transparent bg -->
-                    <div class="relative flex justify-center items-center w-80 lg:w-[460px] h-80 lg:h-[460px] animate-float">
-                        <img src="/images/coco.png" alt="Coconut Coir" class="drop-shadow-2xl w-full h-full object-contain">
-                    </div>
-
-                    <!-- Badge: Eco-Friendly -->
-                    <div class="-top-4 -left-2 lg:-left-10 absolute bg-coco-green shadow-xl px-4 py-3 rounded-2xl text-white animate-sway">
-                        <div class="opacity-80 font-bold text-[10px] uppercase tracking-widest">Eco-Friendly</div>
-                        <div class="font-display font-black text-xl leading-tight">100%<br>Natural</div>
-                    </div>
-
-                    <!-- Badge: PH Made -->
-                    <div class="-right-2 lg:-right-8 -bottom-4 absolute bg-coco-cream shadow-xl px-4 py-3 border-2 border-coco-sand rounded-2xl">
-                        <div class="font-bold text-[10px] text-coco-mid tracking-widest">🇵🇭 Made in the</div>
-                        <div class="font-display font-black text-coco-brown text-xl">Philippines</div>
-                    </div>
-
-
+    <section id="home" class="collection-hero">
+        <div class="collection-hero-inner">
+            <div class="collection-copy">
+                <p class="store-eyebrow">Natural by nature</p>
+                <h1>Everyday living.<br>Thoughtfully crafted.</h1>
+                <p>Discover Philippine-made coconut coir essentials for your home, your garden, and a greener tomorrow.</p>
+                <div class="store-actions">
+                    <a class="store-button" href="<?= site_url('products') ?>">Shop collection</a>
+                    <a class="store-button store-button-outline" href="<?= site_url('about') ?>">Our story</a>
                 </div>
             </div>
-        </div>
-
-        <!-- Wave divider -->
-        <div class="right-0 bottom-0 left-0 absolute pointer-events-none">
-            <svg viewBox="0 0 1440 72" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-14 lg:h-20">
-                <path d="M0 36 Q360 0 720 36 Q1080 72 1440 36 L1440 72 L0 72 Z" fill="#EDE0CC" />
-            </svg>
+            <div class="collection-visual"><img src="<?= base_url('images/coco.png') ?>" alt="Natural coconut and coir fiber"></div>
         </div>
     </section>
-
+    <nav class="collection-categories" aria-label="Shop collections">
+        <?php foreach ([['Home & Living','coirdoormat.png','Home & Living'],['Gardening','growbag.png','Gardening'],['Construction','geotextitle.png','Construction'],['Natural Essentials','coirrope.jpg','']] as [$label,$image,$category]): ?>
+        <a class="collection-category" href="<?= site_url('products') . ($category ? '?category=' . rawurlencode($category) : '') ?>">
+            <img src="<?= base_url('images/' . $image) ?>" alt="<?= esc($label) ?>" loading="lazy">
+            <div><span class="store-eyebrow"><?= esc($label) ?></span><span class="category-link">Shop now</span></div>
+        </a>
+        <?php endforeach; ?>
+    </nav>
 
     <!-- ══════════════════════════ ABOUT ══════════════════════════ -->
-    <section id="about" class="bg-coco-sand py-24">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            <div class="items-center gap-16 grid grid-cols-1 lg:grid-cols-2">
-
-                <!-- Story -->
-                <div class="space-y-6">
-                    <p class="font-bold text-coco-orange text-xs uppercase tracking-[0.3em]">Our Story</p>
-                    <h2 class="font-display font-black text-coco-brown text-4xl sm:text-5xl leading-tight">
-                        The Fiber That<br><em>Changes Everything</em>
-                    </h2>
-                    <p class="font-light text-coco-dark text-lg leading-relaxed">
-                        Coconut coir — the tough fibrous material between the hard inner shell and outer husk of the coconut — has long been discarded as waste. COCOIR is changing that story.
-                    </p>
-                    <p class="text-coco-mid text-sm leading-relaxed">
-                        In the Philippines, where coconuts are abundant and coir utilization is still in its infancy, we lead the charge: turning agricultural byproduct into durable mats, grow bags, erosion control nets, and construction liners. Every product supports local farmers, reduces waste, and brings world-class sustainable materials to your doorstep.
-                    </p>
-                    <div class="flex gap-6 pt-2">
-                        <div class="flex items-start gap-3">
-                            <div class="flex flex-shrink-0 justify-center items-center bg-coco-green/15 rounded-full w-10 h-10">
-                                <i class="text-coco-green text-sm fas fa-seedling"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-coco-brown text-sm">Zero Waste</div>
-                                <div class="text-coco-mid text-xs">Every husk has purpose</div>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <div class="flex flex-shrink-0 justify-center items-center bg-coco-orange/15 rounded-full w-10 h-10">
-                                <i class="text-coco-orange text-sm fas fa-hands-helping"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-coco-brown text-sm">Farmer First</div>
-                                <div class="text-coco-mid text-xs">Fair trade, local sourcing</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stats grid -->
-                <div class="gap-5 grid grid-cols-2">
-                    <div class="shadow-sm p-7 border border-coco-tan/20 rounded-3xl fiber-bg">
-                        <div class="mb-1 font-display font-black text-coco-orange text-5xl">15+</div>
-                        <div class="mb-1 font-bold text-coco-brown text-sm">Product Categories</div>
-                        <div class="text-coco-mid text-xs leading-relaxed">Gardening, construction, craft, and more</div>
-                    </div>
-                    <div class="bg-coco-green shadow-sm p-7 rounded-3xl">
-                        <div class="mb-1 font-display font-black text-coco-cream text-5xl">5+</div>
-                        <div class="mb-1 font-bold text-coco-cream text-sm">Years Expertise</div>
-                        <div class="text-coco-sage text-xs leading-relaxed">Pioneering coir craft in the Philippines</div>
-                    </div>
-                    <div class="bg-coco-brown shadow-sm p-7 rounded-3xl">
-                        <div class="mb-1 font-display font-black text-coco-amber text-5xl">100%</div>
-                        <div class="mb-1 font-bold text-coco-cream text-sm">Biodegradable</div>
-                        <div class="text-coco-tan text-xs leading-relaxed">No synthetics, no compromise</div>
-                    </div>
-                    <div class="flex flex-col justify-center items-center shadow-sm p-7 border border-coco-tan/20 rounded-3xl text-center fiber-bg">
-                        <div class="mb-2 text-5xl">🌴</div>
-                        <div class="font-bold text-coco-brown text-sm">PH Sourced</div>
-                        <div class="text-coco-mid text-xs">Proudly Philippine farmers</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
 <!-- ══════════════════════════ FEATURED PRODUCTS ══════════════════════════ -->
 <section id="products" class="bg-coco-cream py-24">
     <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div class="space-y-4 mb-16 text-center">
             <p class="font-bold text-coco-orange text-xs uppercase tracking-[0.3em]">Our Range</p>
-            <h2 class="font-display font-black text-coco-brown text-4xl sm:text-5xl">Featured Products</h2>
+            <h2 class="font-display font-black text-coco-brown text-4xl sm:text-5xl">Latest Collection</h2>
             <p class="mx-auto max-w-2xl font-light text-coco-mid text-lg">Eco-friendly coir products handcrafted for gardening, construction, and sustainable living.</p>
         </div>
  
@@ -284,6 +154,73 @@
 
 
     <!-- ══════════════════════════ WHY COCOIR ══════════════════════════ -->
+    <section id="about" class="bg-coco-sand py-24">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="items-center gap-16 grid grid-cols-1 lg:grid-cols-2">
+
+                <!-- Story -->
+                <div class="space-y-6">
+                    <p class="font-bold text-coco-orange text-xs uppercase tracking-[0.3em]">Our Story</p>
+                    <h2 class="font-display font-black text-coco-brown text-4xl sm:text-5xl leading-tight">
+                        The Fiber That<br><em>Changes Everything</em>
+                    </h2>
+                    <p class="font-light text-coco-dark text-lg leading-relaxed">
+                        Coconut coir — the tough fibrous material between the hard inner shell and outer husk of the coconut — has long been discarded as waste. COCOIR is changing that story.
+                    </p>
+                    <p class="text-coco-mid text-sm leading-relaxed">
+                        In the Philippines, where coconuts are abundant and coir utilization is still in its infancy, we lead the charge: turning agricultural byproduct into durable mats, grow bags, erosion control nets, and construction liners. Every product supports local farmers, reduces waste, and brings world-class sustainable materials to your doorstep.
+                    </p>
+                    <div class="flex gap-6 pt-2">
+                        <div class="flex items-start gap-3">
+                            <div class="flex flex-shrink-0 justify-center items-center bg-coco-green/15 rounded-full w-10 h-10">
+                                <i class="text-coco-green text-sm fas fa-seedling"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-coco-brown text-sm">Zero Waste</div>
+                                <div class="text-coco-mid text-xs">Every husk has purpose</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="flex flex-shrink-0 justify-center items-center bg-coco-orange/15 rounded-full w-10 h-10">
+                                <i class="text-coco-orange text-sm fas fa-hands-helping"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-coco-brown text-sm">Farmer First</div>
+                                <div class="text-coco-mid text-xs">Fair trade, local sourcing</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats grid -->
+                <div class="gap-5 grid grid-cols-2">
+                    <div class="shadow-sm p-7 border border-coco-tan/20 rounded-3xl fiber-bg">
+                        <div class="mb-1 font-display font-black text-coco-orange text-5xl">15+</div>
+                        <div class="mb-1 font-bold text-coco-brown text-sm">Product Categories</div>
+                        <div class="text-coco-mid text-xs leading-relaxed">Gardening, construction, craft, and more</div>
+                    </div>
+                    <div class="bg-coco-green shadow-sm p-7 rounded-3xl">
+                        <div class="mb-1 font-display font-black text-coco-cream text-5xl">5+</div>
+                        <div class="mb-1 font-bold text-coco-cream text-sm">Years Expertise</div>
+                        <div class="text-coco-sage text-xs leading-relaxed">Pioneering coir craft in the Philippines</div>
+                    </div>
+                    <div class="bg-coco-brown shadow-sm p-7 rounded-3xl">
+                        <div class="mb-1 font-display font-black text-coco-amber text-5xl">100%</div>
+                        <div class="mb-1 font-bold text-coco-cream text-sm">Biodegradable</div>
+                        <div class="text-coco-tan text-xs leading-relaxed">No synthetics, no compromise</div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center shadow-sm p-7 border border-coco-tan/20 rounded-3xl text-center fiber-bg">
+                        <div class="mb-2 text-5xl">🌴</div>
+                        <div class="font-bold text-coco-brown text-sm">PH Sourced</div>
+                        <div class="text-coco-mid text-xs">Proudly Philippine farmers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
     <section id="why-us" class="bg-coco-sand py-24">
         <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div class="space-y-4 mb-16 text-center">
@@ -319,8 +256,6 @@
     <!-- ══════════════════════════ CTA / NEWSLETTER ══════════════════════════ -->
     <section id="contact" class="relative bg-coco-brown py-24 overflow-hidden">
         <!-- Decorative -->
-        <div class="top-0 right-0 absolute bg-coco-orange/10 w-80 h-80 pointer-events-none blob-1"></div>
-        <div class="bottom-0 left-0 absolute bg-coco-leaf/10 w-64 h-64 pointer-events-none blob-2"></div>
         <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.015) 60px,rgba(255,255,255,0.015) 61px);"></div>
 
         <div class="z-10 relative space-y-8 mx-auto px-4 max-w-4xl text-center">

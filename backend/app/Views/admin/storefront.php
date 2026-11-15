@@ -26,7 +26,7 @@ $s = function($key, $default = '') use ($settings) {
     .color-swatch.selected { border-color:#E87722; transform:scale(1.1); }
 </style>
 
-<body class="bg-gray-50 font-body text-coco-brown">
+<body class="site-admin bg-gray-50 font-body text-coco-brown">
 <?= $this->include('components/admin_header') ?>
 
 <main class="admin-main px-6 py-8">

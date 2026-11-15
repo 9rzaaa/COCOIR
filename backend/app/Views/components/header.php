@@ -1,5 +1,5 @@
 <!-- ══════════════════════════ HEADER ══════════════════════════ -->
-<header id="main-header" class="top-0 right-0 left-0 z-50 fixed px-4 lg:px-8 py-3 transition-all duration-400">
+<header id="main-header" class="store-header">
     <?php
     $isLanding   = uri_string() === '' || uri_string() === '/';
     $sessionUser = session()->get('user');
@@ -12,44 +12,10 @@
     $cartCount  = (int)($result['quantity'] ?? 0);
     ?>
 
-    <style>
-        .user-dropdown {
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-
-        .user-menu:hover .user-dropdown,
-        .user-menu:focus-within .user-dropdown {
-            pointer-events: auto;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #mobile-menu {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.3s ease;
-        }
-
-        #mobile-menu.open {
-            max-height: 600px;
-            opacity: 1;
-        }
-
-        .nav-scrolled {
-            background: rgba(250, 243, 232, 0.96) !important;
-            backdrop-filter: blur(14px);
-            box-shadow: 0 2px 24px rgba(59, 35, 20, 0.10);
-        }
-    </style>
-
-    <div class="flex justify-between items-center mx-auto max-w-7xl">
+<div class="flex justify-between items-center mx-auto max-w-7xl">
 
         <!-- ── Logo ── -->
-        <a href="<?= $isLanding ? '#home' : site_url('/') ?>" class="group flex items-center gap-3">
+        <a href="<?= $isLanding ? '#home' : site_url('/') ?>" class="store-brand group flex items-center gap-3">
             <svg class="drop-shadow-md w-12 h-12" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="19" cy="13" r="8" fill="#E87722" opacity="0.92" />
                 <path d="M13 13 Q16 11 19 13" stroke="#F4A940" stroke-width="1.5" fill="none" stroke-linecap="round" />
@@ -199,7 +165,7 @@
         </div>
 
         <!-- ── Hamburger ── -->
-        <button id="hamburger" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Open menu">
+        <button id="hamburger" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
             <span class="block bg-coco-brown w-6 h-0.5 transition-all duration-300" id="ham-1"></span>
             <span class="block bg-coco-brown w-6 h-0.5 transition-all duration-300" id="ham-2"></span>
             <span class="block bg-coco-brown w-4 h-0.5 transition-all duration-300" id="ham-3"></span>
@@ -283,6 +249,7 @@
 
             hamburger.addEventListener('click', () => {
                 const isOpen = mobileMenu.classList.toggle('open');
+                hamburger.setAttribute('aria-expanded', String(isOpen));
                 ham1.style.transform = isOpen ? 'translateY(8px) rotate(45deg)' : '';
                 ham3.style.transform = isOpen ? 'translateY(-8px) rotate(-45deg)' : '';
                 ham3.style.width = isOpen ? '24px' : '';
@@ -291,6 +258,7 @@
             mobileMenu.querySelectorAll('a').forEach(a => {
                 a.addEventListener('click', () => {
                     mobileMenu.classList.remove('open');
+                    hamburger.setAttribute('aria-expanded', 'false');
                     ham1.style.transform = '';
                     ham3.style.transform = '';
                     ham3.style.width = '';

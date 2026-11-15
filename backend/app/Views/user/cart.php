@@ -13,7 +13,7 @@ $isLoggedIn = session()->has('user'); // pass login state to JS
 <html lang="en">
 <?= $this->include('components/head', ['title' => 'Your Cart - COCOIR']) ?>
 
-<body class="flex flex-col bg-coco-cream min-h-screen font-body text-coco-brown">
+<body class="site-store flex flex-col bg-coco-cream min-h-screen font-body text-coco-brown">
     <?= $this->include('components/header') ?>
     <input type="hidden" class="csrf-token" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
 
