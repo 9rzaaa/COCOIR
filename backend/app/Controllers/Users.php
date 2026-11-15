@@ -12,12 +12,27 @@ class Users extends BaseController
 {
     public function index(): string
     {
-        return view('user/landing');
+        return view('user/landing', ['products' => array_slice((new ProductModel())->getActive(), 0, 4)]);
     }
 
     public function about(): string
     {
         return view('user/about');
+    }
+
+    public function magazine(): string
+    {
+        return view('user/magazine', ['products' => (new ProductModel())->getActive()]);
+    }
+
+    public function product($id): string
+    {
+        $product = (new ProductModel())->where('status', 1)->find($id);
+        if (!$product) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        return view('user/product', ['product' => $product]);
     }
 
     public function products(): string
@@ -417,19 +432,26 @@ class Users extends BaseController
     public function addToCart()
     {
         $this->response->setHeader('Content-Type', 'application/json');
-        $id    = $this->request->getPost('id');
-        $name  = $this->request->getPost('name');
-        $price = $this->request->getPost('price');
-        $image = $this->request->getPost('image');
-
-        if (!$id || !$name || !$price) {
-            return $this->response->setStatusCode(400)
-                ->setBody(json_encode(['success' => false, 'message' => 'Invalid product data.']));
+        $id = (int) $this->request->getPost('id');
+        $product = (new ProductModel())->where('status', 1)->find($id);
+        if (!$product) {
+            return $this->response->setStatusCode(404)->setBody(json_encode([
+                'success' => false, 'message' => 'This product is no longer available.', 'csrf_hash' => csrf_hash(),
+            ]));
         }
+        $name = $product['name'];
+        $price = $product['price'];
+        $image = $product['image'];
 
         $model    = new CartItemModel();
         $cond     = $this->getCartConditions();
         $existing = $model->where($cond)->where('product_id', $id)->first();
+        if ((int) ($existing['quantity'] ?? 0) >= (int) $product['stock']) {
+            return $this->response->setStatusCode(409)->setBody(json_encode([
+                'success' => false, 'message' => 'The requested quantity is not available in stock.', 'csrf_hash' => csrf_hash(),
+            ]));
+        }
+
 
         $success = false;
 

@@ -50,104 +50,17 @@
         <input type="hidden" id="landing-csrf-value" value="<?= csrf_hash() ?>">
  
         <div class="gap-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
- 
-            <!-- Card 1 -->
-            <div class="group bg-white shadow-md border border-coco-sand/60 rounded-3xl overflow-hidden product-card">
-                <div class="relative bg-gradient-to-br from-coco-green/20 to-coco-sage/20 aspect-[4/3] overflow-hidden">
-                    <img src="/images/coirdoormat.png" alt="Coir Door Mat" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="top-3 left-3 absolute px-3 py-1 rounded-full font-black text-[10px] uppercase tracking-widest badge-new">New</span>
-                    <button class="wishlist-btn top-3 right-3 absolute flex justify-center items-center bg-white/80 hover:bg-coco-orange opacity-0 group-hover:opacity-100 backdrop-blur-sm rounded-full w-8 h-8 text-coco-brown hover:text-white transition-all">
-                        <i class="text-xs fas fa-heart"></i>
-                    </button>
+            <?php foreach (($products ?? []) as $featured): ?>
+            <article class="product-card flex flex-col">
+                <div class="relative"><a class="product-image-link" href="<?= site_url('products/' . (int) $featured['id']) ?>"><img class="w-full h-full" src="<?= base_url('images/' . ($featured['image'] ?: 'coco.png')) ?>" alt="<?= esc($featured['name']) ?>" loading="lazy"></a></div>
+                <div class="p-5"><p class="store-eyebrow"><?= esc(ucwords(str_replace('_', ' ', $featured['category']))) ?></p><h3><a href="<?= site_url('products/' . (int) $featured['id']) ?>"><?= esc($featured['name']) ?></a></h3><p class="text-coco-mid text-xs my-3"><?= esc(($featured['package_contents'] ?? '') ?: 'View product for package details') ?></p>
+                    <div class="flex justify-between items-center gap-2"><span>₱<?= number_format((float) $featured['price'], 2) ?></span><button class="landing-atc store-button" data-id="<?= (int) $featured['id'] ?>" data-name="<?= esc($featured['name']) ?>" data-price="<?= esc($featured['price']) ?>" data-image="<?= esc($featured['image'] ?? '') ?>" <?= (int) $featured['stock'] <= 0 ? 'disabled' : '' ?>><?= (int) $featured['stock'] > 0 ? 'Add to cart' : 'Out of stock' ?></button></div>
                 </div>
-                <div class="p-5">
-                    <p class="mb-1 font-bold text-[10px] text-coco-green uppercase tracking-widest">Home & Living</p>
-                    <h3 class="mb-1 font-display font-bold text-coco-brown text-lg leading-snug">Coir Door Mat</h3>
-                    <p class="mb-4 text-coco-mid text-xs leading-relaxed">Natural, durable, fully biodegradable entrance mats.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-display font-black text-coco-orange text-xl">₱350</span>
-                        <button class="landing-atc bg-coco-brown hover:bg-coco-orange px-4 py-2 rounded-full font-bold text-coco-cream text-xs transition-colors inline-flex items-center gap-1.5"
-                            data-id="1" data-name="Coir Door Mat" data-price="350" data-image="coirdoormat.png">
-                            <i class="fas fa-shopping-bag text-[10px]"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
- 
-            <!-- Card 2 -->
-            <div class="group bg-white shadow-md border border-coco-sand/60 rounded-3xl overflow-hidden product-card">
-                <div class="relative bg-gradient-to-br from-coco-amber/20 to-coco-orange/10 aspect-[4/3] overflow-hidden">
-                    <img src="/images/growbag.png" alt="Coco Grow Bag" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="top-3 left-3 absolute px-3 py-1 rounded-full font-black text-[10px] uppercase tracking-widest badge-trending">Trending</span>
-                    <button class="wishlist-btn top-3 right-3 absolute flex justify-center items-center bg-white/80 hover:bg-coco-orange opacity-0 group-hover:opacity-100 backdrop-blur-sm rounded-full w-8 h-8 text-coco-brown hover:text-white transition-all">
-                        <i class="text-xs fas fa-heart"></i>
-                    </button>
-                </div>
-                <div class="p-5">
-                    <p class="mb-1 font-bold text-[10px] text-coco-green uppercase tracking-widest">Gardening</p>
-                    <h3 class="mb-1 font-display font-bold text-coco-brown text-lg leading-snug">Coco Grow Bag</h3>
-                    <p class="mb-4 text-coco-mid text-xs leading-relaxed">Perfect moisture retention for vegetables and herbs.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-display font-black text-coco-orange text-xl">₱180</span>
-                        <button class="landing-atc bg-coco-brown hover:bg-coco-orange px-4 py-2 rounded-full font-bold text-coco-cream text-xs transition-colors inline-flex items-center gap-1.5"
-                            data-id="2" data-name="Coco Grow Bag" data-price="180" data-image="growbag.png">
-                            <i class="fas fa-shopping-bag text-[10px]"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
- 
-            <!-- Card 3 -->
-            <div class="group bg-white shadow-md border border-coco-sand/60 rounded-3xl overflow-hidden product-card">
-                <div class="relative bg-gradient-to-br from-coco-brown/10 to-coco-tan/20 aspect-[4/3] overflow-hidden">
-                    <img src="/images/geotextitle.png" alt="Geotextile Erosion Mat" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="top-3 left-3 absolute px-3 py-1 rounded-full font-black text-[10px] uppercase tracking-widest badge-bestseller">Best Seller</span>
-                    <button class="wishlist-btn top-3 right-3 absolute flex justify-center items-center bg-white/80 hover:bg-coco-orange opacity-0 group-hover:opacity-100 backdrop-blur-sm rounded-full w-8 h-8 text-coco-brown hover:text-white transition-all">
-                        <i class="text-xs fas fa-heart"></i>
-                    </button>
-                </div>
-                <div class="p-5">
-                    <p class="mb-1 font-bold text-[10px] text-coco-green uppercase tracking-widest">Construction</p>
-                    <h3 class="mb-1 font-display font-bold text-coco-brown text-lg leading-snug">Geotextile Mat</h3>
-                    <p class="mb-4 text-coco-mid text-xs leading-relaxed">Slope stabilization and erosion control, project-grade.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-display font-black text-coco-orange text-xl">₱1,200</span>
-                        <button class="landing-atc bg-coco-brown hover:bg-coco-orange px-4 py-2 rounded-full font-bold text-coco-cream text-xs transition-colors inline-flex items-center gap-1.5"
-                            data-id="3" data-name="Geotextile Mat" data-price="1200" data-image="geotextitle.png">
-                            <i class="fas fa-shopping-bag text-[10px]"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
- 
-            <!-- Card 4 -->
-            <div class="group bg-white shadow-md border border-coco-sand/60 rounded-3xl overflow-hidden product-card">
-                <div class="relative bg-gradient-to-br from-coco-leaf/20 to-coco-green/10 aspect-[4/3] overflow-hidden">
-                    <img src="/images/coirrope.jpg" alt="Twisted Coir Rope" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <button class="wishlist-btn top-3 right-3 absolute flex justify-center items-center bg-white/80 hover:bg-coco-orange opacity-0 group-hover:opacity-100 backdrop-blur-sm rounded-full w-8 h-8 text-coco-brown hover:text-white transition-all">
-                        <i class="text-xs fas fa-heart"></i>
-                    </button>
-                </div>
-                <div class="p-5">
-                    <p class="mb-1 font-bold text-[10px] text-coco-green uppercase tracking-widest">Craft & Utility</p>
-                    <h3 class="mb-1 font-display font-bold text-coco-brown text-lg leading-snug">Twisted Coir Rope</h3>
-                    <p class="mb-4 text-coco-mid text-xs leading-relaxed">Strong, salt-resistant rope for marine and garden use.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-display font-black text-coco-orange text-xl">₱220</span>
-                        <button class="landing-atc bg-coco-brown hover:bg-coco-orange px-4 py-2 rounded-full font-bold text-coco-cream text-xs transition-colors inline-flex items-center gap-1.5"
-                            data-id="4" data-name="Twisted Coir Rope" data-price="220" data-image="coirrope.jpg">
-                            <i class="fas fa-shopping-bag text-[10px]"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
+            </article>
+            <?php endforeach; ?>
+            <?php if (empty($products)): ?><p>Our collection is being prepared. Check back soon.</p><?php endif; ?>
         </div>
- 
-        <div class="mt-12 text-center">
-            <a href="<?= site_url('products') ?>" class="inline-flex items-center gap-2 bg-coco-brown hover:bg-coco-orange shadow-md hover:shadow-xl px-10 py-4 rounded-full font-bold text-coco-cream hover:scale-105 transition-all duration-300 transform">
-                View All Products <i class="fa-arrow-right text-sm fas"></i>
-            </a>
-        </div>
+        <div class="text-center mt-10"><a class="store-button store-button-outline" href="<?= site_url('magazine') ?>">Explore the Coir Journal →</a></div>
     </div>
 </section>
  

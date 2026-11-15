@@ -10,6 +10,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/',        'Users::index');
 $routes->get('about',    'Users::about');
 $routes->get('products', 'Users::products');
+$routes->get('products/(:num)', 'Users::product/$1');
+$routes->get('magazine', 'Users::magazine');
+$routes->get('signup/success', 'Auth::registrationSuccess');
 
 // ── Cart ───────────────────────────────────────────────────────────────────
 $routes->get('cart',          'Users::cart');

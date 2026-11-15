@@ -637,3 +637,66 @@ body.site-store .fiber-bg {
 body.site-store .collection-categories {
     flex-shrink: 0;
 }
+
+/* Journal, product details, and registration confirmation. */
+.product-image-link { display:block; width:100%; height:100%; }
+.product-image-link:focus-visible { outline-offset:-4px; }
+.store-button:disabled { opacity:.45; cursor:not-allowed; }
+.confirmation-page { display:grid; place-items:center; min-height:65vh; padding:72px 24px; background:#f5f5f3; }
+.confirmation-card { width:100%; max-width:620px; padding:48px; background:white; border:1px solid #e8e8e8; text-align:center; }
+.confirmation-check { display:grid; place-items:center; width:64px; height:64px; margin:0 auto 28px; border:1px solid #c8d3c2; border-radius:50%; background:#f0f4ed; color:#55634e; font-size:30px; }
+.confirmation-card h1 { margin-bottom:20px; line-height:1.12; }
+.confirmation-card > p:not(.store-eyebrow) { color:#727272; font-size:15px; line-height:1.8; margin-bottom:28px; }
+.product-detail-page { max-width:1200px; margin:0 auto; padding:48px 32px 80px; }
+.detail-breadcrumb { display:flex; flex-wrap:wrap; gap:14px; color:#727272; font-size:12px; margin-bottom:32px; }
+.detail-breadcrumb a { text-decoration:underline; }
+.product-detail-layout { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+.product-detail-image { background:#f3f3f1; padding:32px; aspect-ratio:1; display:grid; place-items:center; }
+.product-detail-image img { width:100%; height:100%; max-height:520px; object-fit:contain; mix-blend-mode:multiply; }
+.product-detail-copy h1 { line-height:1.08; margin-bottom:20px; }
+.product-detail-copy > p:not(.store-eyebrow):not(.detail-price) { color:#727272; font-size:14px; line-height:1.8; }
+.detail-price { font-size:26px; margin-bottom:24px; }
+.detail-price small { font-size:12px; color:#727272; white-space:nowrap; }
+.product-specs { margin:26px 0; border-top:1px solid #e8e8e8; }
+.product-specs > div { padding:18px 0; border-bottom:1px solid #e8e8e8; }
+.product-specs dt { font-size:12px; font-weight:700; margin-bottom:8px; }
+.product-specs dd { color:#727272; font-size:14px; line-height:1.8; }
+.product-detail-copy .detail-note { margin-bottom:16px; }
+.product-purchase { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+.purchase-feedback { min-height:20px; font-size:12px; line-height:1.5; color:#55634e; }
+.quick-package { font-size:12px; line-height:1.7; }
+.quick-package strong { display:block; margin-top:8px; }
+.journal-page { max-width:1280px; margin:auto; }
+.journal-heading { text-align:center; padding:64px 24px; border-bottom:1px solid #e8e8e8; }
+body.site-store .journal-heading h1 { font-family:Georgia,serif; font-size:clamp(3rem,7vw,6rem); font-weight:400; margin:0 0 22px; }
+.journal-heading > p:not(.store-eyebrow) { color:#727272; max-width:520px; margin:0 auto 20px; font-size:15px; line-height:1.8; }
+.journal-story { display:grid; grid-template-columns:1fr 1fr; gap:64px; padding:64px 32px; border-bottom:1px solid #e8e8e8; align-items:start; }
+.journal-story:nth-child(even) .journal-story-image { order:2; }
+.journal-story-image { position:relative; background:#f2f3f0; padding:40px; aspect-ratio:4/5; display:grid; place-items:center; }
+.journal-story-image img { width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; }
+.journal-story-image > span { position:absolute; left:24px; top:18px; font-family:Georgia,serif; font-size:24px; color:#727272; }
+body.site-store .journal-story h2 { font-family:Georgia,serif; font-size:clamp(1.8rem,3vw,2.8rem); font-weight:400; line-height:1.15; margin-bottom:22px; }
+.journal-story-copy > p:not(.store-eyebrow), .journal-story-copy li { font-size:14px; line-height:1.8; color:#727272; }
+.journal-story-copy ul { margin:22px 0 26px; padding-left:18px; list-style:disc; }
+.journal-story-copy li + li { margin-top:10px; }
+.journal-shop { border-top:1px solid #ddd; padding-top:22px; }
+.journal-shop h3 { font-size:14px; margin-bottom:18px; }
+.journal-shop-item { display:grid; grid-template-columns:1fr auto; gap:16px; padding:16px 0; border-bottom:1px solid #e8e8e8; align-items:start; }
+.journal-shop-item > a { display:flex; flex-direction:column; gap:7px; font-size:13px; }
+.journal-shop-item .store-button { padding:10px 14px; }
+.journal-end { padding:64px 24px; text-align:center; background:#f3f4f0; }
+.journal-end h2 { font-family:Georgia,serif; font-size:32px; line-height:1.2; margin-bottom:28px; }
+@media(max-width:767px) {
+ .confirmation-card { padding:32px 22px; }
+ .product-detail-page { padding:32px 20px 48px; }
+ .product-detail-layout { grid-template-columns:1fr; gap:30px; }
+ .product-detail-image { padding:24px; }
+ .journal-heading { padding:44px 20px; }
+ .journal-story { grid-template-columns:1fr; gap:30px; padding:40px 20px; }
+ .journal-story-image { aspect-ratio:4/3; padding:28px; }
+ .journal-story:nth-child(even) .journal-story-image { order:0; }
+}
+@media(min-width:1024px) and (max-width:1199px) {
+ body.site-store #main-header nav { gap:16px; }
+ body.site-store #main-header > .flex { gap:18px; }
+}

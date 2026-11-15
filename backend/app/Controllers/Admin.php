@@ -95,6 +95,8 @@ class Admin extends BaseController
         $data = [
             'name'        => $this->request->getPost('name'),
             'description' => $this->request->getPost('description'),
+            'package_contents' => $this->request->getPost('package_contents'),
+            'specifications' => $this->request->getPost('specifications'),
             'price'       => (float) $this->request->getPost('price'),
             'category'    => $this->request->getPost('category'),
             'stock'       => (int) $this->request->getPost('stock'),

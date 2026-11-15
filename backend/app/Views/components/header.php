@@ -37,6 +37,7 @@
 
         <!-- ── Desktop Nav ── -->
         <nav class="hidden lg:flex items-center gap-8">
+            <a href="<?= site_url('magazine') ?>" class="font-semibold text-coco-dark hover:text-coco-orange text-xs transition-colors">Magazine</a>
             <a href="<?= $isLanding ? '#home'    : site_url('/') ?>"
                 class="font-semibold text-coco-dark hover:text-coco-orange text-xs uppercase tracking-widest transition-colors">Home</a>
             <a href="<?= site_url('about') ?>"
@@ -176,6 +177,7 @@
     <div id="mobile-menu" class="lg:hidden bg-coco-cream px-4 border-coco-sand border-t">
         <nav class="flex flex-col gap-1 py-4">
             <!-- Nav links -->
+            <a href="<?= site_url('magazine') ?>" class="py-2.5 border-coco-sand/50 border-b font-semibold text-coco-dark text-xs uppercase tracking-widest">Magazine</a>
             <a href="<?= $isLanding ? '#home'    : site_url('/') ?>" class="py-2.5 border-coco-sand/50 border-b font-semibold text-coco-dark hover:text-coco-orange text-xs uppercase tracking-widest transition-colors">Home</a>
             <a href="<?= site_url('about') ?>" class="py-2.5 border-coco-sand/50 border-b font-semibold text-coco-dark hover:text-coco-orange text-xs uppercase tracking-widest transition-colors">About</a>
             <a href="<?= site_url('products') ?>" class="py-2.5 border-coco-sand/50 border-b font-semibold text-coco-dark hover:text-coco-orange text-xs uppercase tracking-widest transition-colors">Products</a>

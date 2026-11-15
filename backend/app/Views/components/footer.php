@@ -31,7 +31,7 @@
             <div>
                 <h4 class="mb-4 font-bold text-coco-cream text-xs uppercase tracking-widest">Company</h4>
                 <ul class="space-y-2">
-                    <?php foreach (['About Us' => $isLanding ? '#about' : site_url('/') . '#about', 'Our Farmers' => '#', 'Sustainability' => '#', 'Blog' => '#', 'Careers' => '#'] as $label => $link): ?>
+                    <?php foreach (['About Us' => $isLanding ? '#about' : site_url('/') . '#about', 'Our Farmers' => '#', 'Sustainability' => '#', 'Magazine' => site_url('magazine'), 'Careers' => '#'] as $label => $link): ?>
                         <li><a href="<?= $link ?>" class="text-coco-tan hover:text-coco-amber text-sm transition-colors"><?= $label ?></a></li>
                     <?php endforeach; ?>
                 </ul>

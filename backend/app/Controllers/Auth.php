@@ -179,13 +179,21 @@ class Auth extends BaseController
         $inserted = $userModel->insert($data);
 
         if ($inserted) {
-            $session->setFlashdata('success', 'Account created successfully! Please login.');
-            return redirect()->to('/login');
+            return redirect()->to('/signup/success')->with('registration_complete', true);
         } else {
             $session->setFlashdata('errors', ['general' => 'Failed to create account. Please try again.']);
             $session->setFlashdata('old', $post);
             return redirect()->back()->withInput();
         }
+    }
+
+    public function registrationSuccess()
+    {
+        if (!session()->getFlashdata('registration_complete')) {
+            return redirect()->to('/signup');
+        }
+
+        return view('user/signup_success');
     }
 
     // display forgot password page

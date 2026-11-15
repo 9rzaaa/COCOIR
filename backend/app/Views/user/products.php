@@ -148,8 +148,7 @@ select{appearance:none;cursor:pointer}
 
                 <!-- Image -->
                 <div class="relative bg-gradient-to-br from-coco-sand/60 to-coco-cream aspect-[4/3] overflow-hidden">
-                    <img src="/images/<?= esc($p['image'] ?? 'default.png') ?>" alt="<?= esc($p['name']) ?>"
-                        class="w-full h-full object-cover card-img">
+                    <a class="product-image-link" href="<?= site_url('products/' . (int) $p['id']) ?>"><img src="/images/<?= esc($p['image'] ?? 'coco.png') ?>" alt="<?= esc($p['name']) ?>" class="w-full h-full object-cover card-img"></a>
                     <?php if (!empty($badge)): ?>
                     <span class="absolute top-3 left-3 <?= $badgeClass[$badge] ?? '' ?> text-[10px] font-black tracking-widest uppercase rounded-full px-3 py-1">
                         <?= esc($badge) ?>
@@ -163,7 +162,7 @@ select{appearance:none;cursor:pointer}
                 <!-- Info -->
                 <div class="flex flex-col flex-1 p-5">
                     <p class="mb-1 font-bold text-[10px] text-coco-green uppercase tracking-widest"><?= esc($catDisplay) ?></p>
-                    <h3 class="mb-1 font-display font-black text-coco-brown text-lg leading-snug"><?= esc($p['name']) ?></h3>
+                    <h3 class="mb-1 font-display font-black text-coco-brown text-lg leading-snug"><a href="<?= site_url('products/' . (int) $p['id']) ?>"><?= esc($p['name']) ?></a></h3>
                     <p class="flex-1 mb-4 text-coco-mid text-xs leading-relaxed"><?= esc(substr($desc, 0, 80)) ?><?= strlen($desc) > 80 ? '...' : '' ?></p>
 
                     <?php if (isset($p['stock']) && $p['stock'] <= 5 && $p['stock'] > 0): ?>
@@ -259,6 +258,8 @@ select{appearance:none;cursor:pointer}
                 </div>
 
                 <p id="modal-desc" class="text-coco-mid text-sm leading-relaxed"></p>
+                <div class="quick-package"><strong>What you receive</strong><p id="modal-package"></p><strong>Specifications</strong><p id="modal-specifications"></p></div>
+                <a id="modal-details-link" class="category-link" href="#">View full product details →</a>
 
                 <div id="modal-stock" class="flex items-center gap-2 text-xs font-semibold"></div>
 
@@ -298,7 +299,7 @@ select{appearance:none;cursor:pointer}
 
 <!-- Products JSON for modal -->
 <script>
-const productsData  = <?= json_encode(array_values($products)) ?>;
+const productsData  = <?= json_encode(array_values($products), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 const categoryLabels = <?= json_encode($categoryLabels) ?>;
 const badgeClassMap  = {
     'New':'badge-new','Trending':'badge-trending',
@@ -441,7 +442,7 @@ function openProductModal(id) {
 
     const catDisplay = categoryLabels[p.category] || p.category || '';
     const badge      = p.badge || '';
-    const stock      = p.stock ?? 99;
+    const stock      = Number(p.stock ?? 0);
     const desc       = p.description || p.desc || '';
 
     document.getElementById('modal-img').src          = '/images/' + (p.image || 'default.png');
@@ -449,6 +450,9 @@ function openProductModal(id) {
     document.getElementById('modal-category').textContent = catDisplay;
     document.getElementById('modal-name').textContent     = p.name;
     document.getElementById('modal-desc').textContent     = desc;
+    document.getElementById('modal-package').textContent = p.package_contents || 'Package quantity not specified. Contact us to confirm before ordering.';
+    document.getElementById('modal-specifications').textContent = p.specifications || 'Measurements and weight not specified.';
+    document.getElementById('modal-details-link').href = <?= json_encode(site_url('products')) ?> + '/' + Number(p.id);
     document.getElementById('modal-price').textContent    = '₱' + Number(p.price).toLocaleString('en-PH');
 
     // Badge

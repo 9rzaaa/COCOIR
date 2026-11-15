@@ -186,6 +186,15 @@ $categoryLabels = [
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-coco-orange transition-colors resize-none"></textarea>
                 </div>
                 <div class="sm:col-span-2">
+                    <label for="form-package-contents" class="block text-xs font-bold text-coco-mid mb-1.5 uppercase tracking-wide">What the customer receives</label>
+                    <textarea name="package_contents" id="form-package-contents" rows="2" placeholder="Enter verified contents, e.g. 1 mat per order unit or 1 pack containing 5 liners." class="w-full border-2 border-gray-200 px-4 py-2.5 text-sm"></textarea>
+                    <p class="text-xs text-coco-mid mt-1">State the actual piece count, pack size, or supplied length. This appears on the product page.</p>
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="form-specifications" class="block text-xs font-bold text-coco-mid mb-1.5 uppercase tracking-wide">Size, weight &amp; specifications</label>
+                    <textarea name="specifications" id="form-specifications" rows="3" placeholder="Enter verified dimensions, weight, material, and other specifications with units." class="w-full border-2 border-gray-200 px-4 py-2.5 text-sm"></textarea>
+                </div>
+                <div class="sm:col-span-2">
                     <label class="block text-xs font-bold text-coco-mid mb-1.5 uppercase tracking-wide">Product Image</label>
                     <label class="flex flex-col items-center gap-2 border-2 border-dashed border-gray-200 rounded-xl p-5 cursor-pointer hover:border-coco-orange transition-colors">
                         <i class="fas fa-cloud-upload-alt text-coco-tan text-2xl"></i>
@@ -233,6 +242,8 @@ function openEditModal(p) {
     document.getElementById('form-stock').value       = p.stock;
     document.getElementById('form-status').value      = p.status;
     document.getElementById('form-description').value = p.description || '';
+    document.getElementById('form-package-contents').value = p.package_contents || '';
+    document.getElementById('form-specifications').value = p.specifications || '';
     document.getElementById('img-preview').classList.add('hidden');
     if (p.image) {
         document.getElementById('current-img').classList.remove('hidden');
