@@ -299,11 +299,11 @@
                 ],
                 [
                     'name' => 'Steven Ballesteros',
-                    'role' => 'Logistics Coordinator',
+                    'role' => 'Head of Logistics & Distribution',
                     'photo' => '',
                     'initial' => 'SB',
                     'color' => 'coco-green',
-                    'bio' => 'Coordinates order fulfillment, shipping, and delivery schedules to help bring COCOIR products from our makers to your doorstep with care.',
+                    'bio' => 'Leads logistics strategy, order fulfillment, and nationwide distribution, ensuring COCOIR products reach customers efficiently and with care.',
                     'social' => [],
                 ],
             ];
