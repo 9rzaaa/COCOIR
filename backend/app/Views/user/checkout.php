@@ -407,10 +407,13 @@ $total    = $subtotal + $shipping;
                             </span>
                         </div>
 
-                        <button type="submit"
-                            class="bg-coco-orange hover:bg-coco-dark shadow-coco-orange/25 shadow-lg hover:shadow-xl py-4 rounded-full w-full font-bold text-white text-lg transition-all hover:-translate-y-0.5 duration-300">
+                        <button type="submit" id="place-order-btn" disabled
+                            class="bg-coco-orange hover:bg-coco-dark shadow-coco-orange/25 shadow-lg hover:shadow-xl py-4 rounded-full w-full font-bold text-white text-lg transition-all hover:-translate-y-0.5 duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-coco-orange disabled:hover:shadow-lg">
                             Place Order
                         </button>
+                        <p id="proof-hint" class="mt-3 text-coco-orange text-xs text-center font-semibold">
+                            <i class="fas fa-info-circle mr-1"></i> Upload your payment screenshot to place your order.
+                        </p>
 
                         <div class="flex justify-center items-center gap-2 mt-4 text-coco-mid/70 text-xs">
                             <i class="text-coco-green fas fa-shield-alt"></i>
@@ -424,6 +427,27 @@ $total    = $subtotal + $shipping;
                 </div>
             </div>
 
+            <!-- Order Placed Modal -->
+<div id="order-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-coco-brown/60 backdrop-blur-sm"></div>
+    <div id="order-modal-card" class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md p-10 text-center space-y-5 scale-90 opacity-0 transition-all duration-300">
+        <div class="w-20 h-20 bg-coco-green/15 rounded-full flex items-center justify-center mx-auto">
+            <i class="fas fa-check text-coco-green text-4xl"></i>
+        </div>
+        <div>
+            <h3 class="font-display font-black text-3xl text-coco-brown mb-2">Order Placed!</h3>
+            <p class="text-coco-mid text-sm leading-relaxed">
+                Thank you for shopping with COCOIR. You can track your order on the next page.
+            </p>
+        </div>
+        <a id="order-modal-link" href="#"
+           class="block bg-coco-orange hover:bg-coco-dark text-white font-bold py-3 rounded-full transition-colors">
+            Track My Order
+        </a>
+        <p class="text-coco-mid/70 text-xs">Redirecting in <span id="order-countdown">4</span>s…</p>
+    </div>
+</div>
+
         </div><!-- /grid -->
     </form><!-- /checkout-form -->
 
@@ -435,24 +459,116 @@ $total    = $subtotal + $shipping;
 const subtotal = <?= $subtotal ?>;
 const shipping = <?= $shipping ?>;
 
-// ── Sync visible fields into hidden inputs before submit ──
-document.getElementById('checkout-form').addEventListener('submit', function(e) {
-    const receive = document.getElementById('hidden-receive').value;
+// ── Enable/disable Place Order depending on payment proof ──
+function updatePlaceOrderState() {
+    const btn    = document.getElementById('place-order-btn');
+    const hint   = document.getElementById('proof-hint');
+    const method = document.getElementById('hidden-payment').value;
+    const file   = document.querySelector('[name="payment_screenshot"]');
+    const needsProof = method === 'instapay';
+    const hasProof   = !!(file && file.files && file.files.length > 0);
+    const blocked    = needsProof && !hasProof;
+    btn.disabled = blocked;
+    hint.classList.toggle('hidden', !blocked);
+}
+document.addEventListener('DOMContentLoaded', updatePlaceOrderState);
 
-    if (receive === 'pickup') {
-        // For pickup, use pickup contact fields
+// ── Order placed popup ──
+function showOrderModal(nextUrl) {
+    const modal = document.getElementById('order-modal');
+    const card  = document.getElementById('order-modal-card');
+    document.getElementById('order-modal-link').href = nextUrl;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    requestAnimationFrame(() => {
+        card.classList.remove('scale-90', 'opacity-0');
+        card.classList.add('scale-100', 'opacity-100');
+    });
+
+    let seconds = 4;
+    const counter = document.getElementById('order-countdown');
+    const timer = setInterval(() => {
+        seconds--;
+        counter.textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = nextUrl;
+        }
+    }, 1000);
+}
+
+// ── Submit order in the background, then show the popup ──
+document.getElementById('checkout-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (document.getElementById('place-order-btn').disabled) return;
+
+    const form = this;
+    const btn  = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+
+    // For pickup, copy the pickup contact fields into the delivery fields
+    if (document.getElementById('hidden-receive').value === 'pickup') {
         const pickupName  = document.getElementById('field-pickup_name');
         const pickupPhone = document.getElementById('field-pickup_phone');
-        // Split name into first/last best-effort
         const nameParts = (pickupName?.value ?? '').trim().split(' ');
-        document.querySelector('[name="first_name"]') && (document.querySelector('[name="first_name"]').value = nameParts[0] ?? '');
-        document.querySelector('[name="last_name"]')  && (document.querySelector('[name="last_name"]').value  = nameParts.slice(1).join(' ') ?? '');
-        document.querySelector('[name="phone"]')      && (document.querySelector('[name="phone"]').value      = pickupPhone?.value ?? '');
-        document.querySelector('[name="address"]')    && (document.querySelector('[name="address"]').value    = 'Store Pickup — COCOIR, 67 Conti Ave., Quezon City');
-        document.querySelector('[name="city"]')       && (document.querySelector('[name="city"]').value       = 'Quezon City');
-        document.querySelector('[name="zip"]')        && (document.querySelector('[name="zip"]').value        = '1100');
+        form.querySelector('[name="first_name"]').value = nameParts[0] ?? '';
+        form.querySelector('[name="last_name"]').value  = nameParts.slice(1).join(' ');
+        form.querySelector('[name="phone"]').value      = pickupPhone?.value ?? '';
+        form.querySelector('[name="address"]').value    = 'Store Pickup — COCOIR, 67 Conti Ave., Quezon City';
+        form.querySelector('[name="city"]').value       = 'Quezon City';
+        form.querySelector('[name="zip"]').value        = '1100';
     }
-    // Delivery fields are already named correctly and inside the form — no extra sync needed
+
+    btn.disabled = true;
+    btn.textContent = 'Placing order...';
+
+    try {
+        const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        console.log('Order response:', res.status, res.url, res.redirected, contentType);
+
+        // Case 1: server answers with JSON
+        if (contentType.includes('application/json')) {
+            const data = await res.json();
+            console.log('Order JSON:', data);
+            const next = data.redirect || data.redirect_url || data.url || data.next;
+            if (data.success !== false && next) {
+                showOrderModal(next);
+                return;
+            }
+            throw new Error(data.message || 'The order was not accepted.');
+        }
+
+        // Case 2: CSRF / session problem
+        if (res.status === 403) {
+            throw new Error('Your session expired. Please refresh the page and try again.');
+        }
+
+        // Case 3: server redirected us somewhere
+        const path = new URL(res.url).pathname.replace(/\/+$/, '');
+        const backOnCheckout = path.endsWith('/checkout') || path.endsWith('/checkout/place');
+
+        if (res.ok && res.redirected && !backOnCheckout) {
+            showOrderModal(res.url);
+            return;
+        }
+        if (res.redirected) {
+            window.location.href = res.url;
+            return;
+        }
+
+        throw new Error('Unexpected server response (status ' + res.status + ').');
+    } catch (err) {
+        console.error(err);
+        alert(err.message || 'Could not place your order. Please try again.');
+        btn.textContent = originalText;
+        updatePlaceOrderState();
+    }
 });
 
 function switchReceive(method) {
@@ -501,6 +617,8 @@ function switchPayment(method) {
     cod.classList.toggle('border-coco-orange',      method === 'cod');
     cod.classList.toggle('bg-coco-orange/5',        method === 'cod');
     cod.classList.toggle('border-coco-sand',        method !== 'cod');
+
+    updatePlaceOrderState();
 }
 
 function previewScreenshot(input) {
@@ -513,7 +631,10 @@ function previewScreenshot(input) {
             preview.classList.remove('hidden');
         };
         reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.classList.add('hidden');
     }
+    updatePlaceOrderState();
 }
 </script>
 

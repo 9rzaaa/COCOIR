@@ -132,6 +132,14 @@
         </div>
     </section>
 
+    <!-- Add-to-cart toast -->
+        <div id="landing-toast" class="fixed bottom-6 right-6 z-[9999] transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
+            <div class="bg-coco-brown text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+                <i class="fas fa-check-circle text-coco-amber"></i>
+                <span id="landing-toast-msg" class="text-sm font-semibold"></span>
+            </div>
+        </div>
+
 
 
     <section id="why-us" class="bg-coco-sand py-24">
