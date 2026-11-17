@@ -388,29 +388,13 @@ $statusBadge = [
                     <div class="space-y-3 pt-2 text-center">
                         <p class="font-bold text-coco-brown text-sm">Scan to Pay via InstaPay / GCash / Maya</p>
                         <div class="flex justify-center">
-                            <div class="inline-block bg-white shadow-sm p-2 border-2 border-coco-orange rounded-xl">
-                                <svg viewBox="0 0 100 100" class="w-40 h-40" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="100" height="100" fill="white" />
-                                    <rect x="10" y="10" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3" />
-                                    <rect x="15" y="15" width="20" height="20" fill="#3B2314" />
-                                    <rect x="60" y="10" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3" />
-                                    <rect x="65" y="15" width="20" height="20" fill="#3B2314" />
-                                    <rect x="10" y="60" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3" />
-                                    <rect x="15" y="65" width="20" height="20" fill="#3B2314" />
-                                    <rect x="60" y="55" width="5" height="5" fill="#3B2314" />
-                                    <rect x="70" y="55" width="5" height="5" fill="#3B2314" />
-                                    <rect x="65" y="60" width="5" height="5" fill="#3B2314" />
-                                    <rect x="80" y="60" width="5" height="5" fill="#3B2314" />
-                                    <rect x="60" y="65" width="5" height="5" fill="#3B2314" />
-                                    <rect x="75" y="65" width="10" height="5" fill="#3B2314" />
-                                    <rect x="60" y="75" width="10" height="5" fill="#3B2314" />
-                                    <rect x="75" y="70" width="5" height="10" fill="#3B2314" />
-                                    <rect x="85" y="75" width="5" height="10" fill="#3B2314" />
-                                    <text x="50" y="54" text-anchor="middle" font-size="5" fill="#E87722" font-family="sans-serif" font-weight="bold">COCOIR</text>
-                                </svg>
+                            <div class="inline-block bg-white shadow-sm p-3 border-2 border-coco-orange rounded-xl relative">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=3B2314&bgcolor=FFFFFF&data=<?= urlencode('paymongo://qrph/merchant/cocoir-eco-ph') ?>"
+                                     alt="PayMongo QR Ph Code"
+                                     class="w-40 h-40 object-contain">
                             </div>
                         </div>
-                        <p class="text-coco-mid text-xs">Account: <strong class="text-coco-brown">COCOIR Co. / 09XX-XXX-XXXX</strong></p>
+                        <p class="text-coco-mid text-xs">Merchant: <strong class="text-coco-brown">COCOIR Eco-Enterprise Inc. (MID: PM-QRPH-0917-882-6264)</strong></p>
                     </div>
 
                     <!-- Upload Proof -->
