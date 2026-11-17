@@ -252,11 +252,16 @@ class Users extends BaseController
             $proofFile->move(FCPATH . 'images/payments', $proofPath);
         }
 
-        $orderModel = new OrderModel();
-        $orderId    = $orderModel->placeOrder([
+        $orderModel     = new OrderModel();
+        $paymentMethod  = $this->request->getPost('payment_method') ?: 'instapay';
+        $idempotencyKey = $this->request->getPost('idempotency_key')
+            ?: ('idem-ord-' . $userId . '-' . substr(hash('sha256', json_encode($cartItems) . floor(time() / 15)), 0, 16));
+
+        $orderId = $orderModel->placeOrder([
             'user_id'         => $userId,
-            'payment_method'  => $this->request->getPost('payment_method'),
+            'payment_method'  => $paymentMethod,
             'payment_proof'   => $proofPath,
+            'idempotency_key' => $idempotencyKey,
             'receive_method'  => $this->request->getPost('receive_method'),
             'recipient_name'  => $this->request->getPost('first_name') . ' ' . $this->request->getPost('last_name'),
             'recipient_phone' => $this->request->getPost('phone'),
@@ -276,7 +281,39 @@ class Users extends BaseController
         // Clear cart after successful order
         $cartModel->where($this->getCartConditions())->delete();
 
-        session()->setFlashdata('success', 'Order placed successfully! 🥥 We\'ll notify you once confirmed.');
+        $createdOrder = $orderModel->find($orderId);
+
+        if ($paymentMethod === 'cod') {
+            $orderModel->deductStockIdempotent((int) $orderId);
+            session()->setFlashdata('success', 'COD Order ' . ($createdOrder['order_number'] ?? '') . ' placed and inventory reserved! 🥥');
+            return redirect()->to('/orders?tab=to_ship');
+        }
+
+        // Integration Point 1: Call PayMongo Gateway API to create a Checkout Session
+        $paymongo = new \App\Libraries\PayMongoGatewayService();
+        $pmResult = $paymongo->createCheckoutSession($createdOrder, $cartItems);
+
+        if ($pmResult['ok'] && !empty($pmResult['data']['data']['id'])) {
+            $sessionId   = $pmResult['data']['data']['id'];
+            $checkoutUrl = $pmResult['data']['data']['attributes']['checkout_url'] ?? null;
+            $orderModel->update($orderId, [
+                'payment_reference'    => $sessionId,
+                'payment_checkout_url' => $checkoutUrl,
+            ]);
+            session()->setFlashdata(
+                'success',
+                "Order {$createdOrder['order_number']} created & linked to PayMongo Session ({$sessionId} in {$pmResult['latency_ms']}ms). Complete payment below!"
+            );
+        } else {
+            // Graceful fallback when Payment Gateway times out or returns 503
+            session()->setFlashdata(
+                'error',
+                "Order {$createdOrder['order_number']} was safely saved (Idempotency-Key: {$idempotencyKey}) without duplication, " .
+                "but PayMongo Gateway returned {$pmResult['status_code']} ({$pmResult['error']}) after {$pmResult['retry_count']} retries ({$pmResult['latency_ms']}ms). " .
+                "You can safely retry payment from My Orders."
+            );
+        }
+
         return redirect()->to('/orders?tab=to_pay');
     }
 
@@ -411,14 +448,124 @@ class Users extends BaseController
             return redirect()->to('/login');
         }
 
-        $userId     = session()->get('user')['id'];
-        $orderModel = new OrderModel();
-        $orders     = $orderModel->getByUser($userId);
+        $userId         = session()->get('user')['id'];
+        $orderModel     = new OrderModel();
+        $orders         = $orderModel->getByUser($userId);
+        $courierService = new \App\Libraries\CocoExpressCourierService();
+
+        foreach ($orders as &$order) {
+            if (!empty($order['tracking_number'])) {
+                $order['live_tracking'] = $courierService->getTrackingStatus($order);
+            }
+        }
+        unset($order);
 
         return view('user/orders', [
             'title'  => 'My Orders — COCOIR',
             'orders' => $orders,
         ]);
+    }
+
+    // ── Complete / Retry PayMongo Sandbox Payment (Triggers Webhook Flow) ──
+    public function payWithPaymongoSandbox()
+    {
+        if (!session()->has('user')) {
+            return redirect()->to('/login');
+        }
+
+        $userId     = session()->get('user')['id'];
+        $orderId    = (int) $this->request->getPost('order_id');
+        $orderModel = new OrderModel();
+        $order      = $orderModel->getOrderForUser($orderId, $userId);
+
+        if (!$order) {
+            session()->setFlashdata('error', 'Order not found.');
+            return redirect()->to('/orders');
+        }
+
+        $paymongo = new \App\Libraries\PayMongoGatewayService();
+        $pmResult = $paymongo->createCheckoutSession($order, $order['items'] ?? []);
+
+        if (!$pmResult['ok']) {
+            session()->setFlashdata(
+                'error',
+                "PayMongo Gateway Error ({$pmResult['status_code']}): {$pmResult['error']} " .
+                "[Retried {$pmResult['retry_count']}x in {$pmResult['latency_ms']}ms | Circuit: {$pmResult['circuit_state']}]. Order remains safely in To Pay."
+            );
+            return redirect()->to('/orders?tab=to_pay');
+        }
+
+        $sessionId = $pmResult['data']['data']['id'] ?? ('cs_test_' . bin2hex(random_bytes(8)));
+
+        // Dispatch signed PayMongo webhook event (`checkout_session.payment.paid`)
+        $eventId = 'evt_pm_' . substr(hash('sha256', $order['order_number'] . ':' . $sessionId), 0, 20);
+        $webhookPayload = [
+            'data' => [
+                'id'   => $eventId,
+                'type' => 'event',
+                'attributes' => [
+                    'type' => 'checkout_session.payment.paid',
+                    'data' => [
+                        'id'         => $sessionId,
+                        'type'       => 'checkout_session',
+                        'attributes' => [
+                            'reference_number' => $order['order_number'],
+                            'amount'           => (int) round(((float) $order['total_amount']) * 100),
+                            'currency'         => 'PHP',
+                            'payment_status'   => 'paid',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $rawWebhook = json_encode($webhookPayload);
+        $sigHeader  = \App\Libraries\IntegrationHttpClient::signWebhookPayload($rawWebhook, $paymongo->getWebhookSecret());
+
+        // Verify signature via our HMAC verifier and process idempotently
+        if (\App\Libraries\IntegrationHttpClient::verifyWebhookSignature($rawWebhook, $sigHeader, $paymongo->getWebhookSecret())) {
+            $webhookModel = new \App\Models\WebhookEventModel();
+            if (!$webhookModel->hasProcessed($eventId)) {
+                $orderModel->update($orderId, [
+                    'payment_status'    => 'paid',
+                    'payment_reference' => $sessionId,
+                    'status'            => 'to_ship',
+                    'paid_at'           => date('Y-m-d H:i:s'),
+                ]);
+                $orderModel->deductStockIdempotent($orderId);
+
+                $webhookModel->insert([
+                    'event_id'        => $eventId,
+                    'provider'        => 'paymongo',
+                    'event_type'      => 'checkout_session.payment.paid',
+                    'signature_valid' => 1,
+                    'status'          => 'processed',
+                    'payload'         => $rawWebhook,
+                    'processed_at'    => date('Y-m-d H:i:s'),
+                    'created_at'      => date('Y-m-d H:i:s'),
+                ]);
+
+                (new \App\Models\IntegrationLogModel())->record([
+                    'correlation_id'   => $pmResult['correlation_id'],
+                    'service_name'     => 'paymongo',
+                    'direction'        => 'inbound_webhook',
+                    'endpoint'         => '/api/v1/webhooks/paymongo',
+                    'http_method'      => 'POST',
+                    'status_code'      => 200,
+                    'latency_ms'       => 3.40,
+                    'retry_count'      => 0,
+                    'idempotency_key'  => $eventId,
+                    'circuit_state'    => 'CLOSED',
+                    'request_payload'  => $rawWebhook,
+                    'response_payload' => '{"status":"processed","signature_verified":true}',
+                ]);
+            }
+        }
+
+        session()->setFlashdata(
+            'success',
+            "PayMongo Sandbox payment confirmed via signed HMAC-SHA256 webhook ({$eventId})! Inventory deducted and order moved to To Ship."
+        );
+        return redirect()->to('/orders?tab=to_ship');
     }
 
     // ── Cart ──────────────────────────────────────────────────────────

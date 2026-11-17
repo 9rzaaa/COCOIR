@@ -121,6 +121,21 @@ $statusBadge = [
             </div>
         </div>
 
+        <!-- Flash banners for Payment Gateway / Courier API status -->
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="mb-6 bg-green-50 border-2 border-green-300 text-green-800 px-5 py-4 rounded-2xl flex items-start gap-3 shadow-sm">
+                <i class="fas fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                <div class="text-sm font-semibold"><?= esc(session()->getFlashdata('success')) ?></div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="mb-6 bg-amber-50 border-2 border-amber-400 text-amber-900 px-5 py-4 rounded-2xl flex items-start gap-3 shadow-sm">
+                <i class="fas fa-exclamation-triangle text-amber-600 text-lg mt-0.5"></i>
+                <div class="text-sm font-semibold"><?= esc(session()->getFlashdata('error')) ?></div>
+            </div>
+        <?php endif; ?>
+
         <!-- Tab bar -->
         <div class="bg-white shadow-sm mb-8 border border-coco-sand/60 rounded-2xl overflow-x-auto">
             <div class="flex px-2 min-w-max">
@@ -230,6 +245,40 @@ $statusBadge = [
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                 </div>
+
+                                <?php if (!empty($order['tracking_number'])):
+                                    $liveTrack   = $order['live_tracking'] ?? null;
+                                    $isDegraded  = !empty($liveTrack['degraded']);
+                                    $checkpoints = $liveTrack['tracking']['checkpoints'] ?? (json_decode($order['tracking_history'] ?? '[]', true) ?: []);
+                                ?>
+                                    <div class="mt-4 pt-3 border-t border-coco-sand/30 bg-coco-cream/40 rounded-2xl p-3.5">
+                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                            <div class="flex items-center gap-2 text-xs">
+                                                <i class="fas fa-shipping-fast text-coco-orange"></i>
+                                                <span class="font-bold text-coco-brown">CocoExpress Waybill:</span>
+                                                <code class="bg-white px-2 py-0.5 rounded border border-coco-sand font-mono font-bold text-coco-orange"><?= esc($order['tracking_number']) ?></code>
+                                            </div>
+                                            <?php if ($isDegraded): ?>
+                                                <span class="bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                                    <i class="fas fa-life-ring text-[9px]"></i> Graceful Fallback: Showing Cached Tracking (Courier API Unavailable)
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                                    <i class="fas fa-bolt text-[9px]"></i> Live Synced via Courier API v1
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php if (!empty($checkpoints)):
+                                            $latestCp = end($checkpoints);
+                                        ?>
+                                            <div class="text-xs text-coco-mid">
+                                                <strong class="text-coco-brown uppercase text-[10px]"><?= esc($latestCp['status'] ?? '') ?></strong>
+                                                · <?= esc($latestCp['location'] ?? '') ?> — <?= esc($latestCp['description'] ?? '') ?>
+                                                <span class="text-[10px] text-coco-tan ml-1">(<?= esc($latestCp['timestamp'] ?? '') ?>)</span>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 
@@ -247,6 +296,13 @@ $statusBadge = [
                                     View Details
                                 </button>
                                 <?php if ($order['status'] === 'to_pay'): ?>
+                                    <form action="<?= site_url('orders/paymongo-sandbox') ?>" method="POST" class="contents">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full font-bold text-white text-xs transition-colors flex items-center gap-1.5">
+                                            <i class="fas fa-bolt text-[10px]"></i> PayMongo Sandbox
+                                        </button>
+                                    </form>
                                     <button onclick="openPayModal(<?= $order['id'] ?>)" class="bg-coco-orange hover:bg-coco-dark px-4 py-2 rounded-full font-bold text-white text-xs transition-colors">
                                         Pay Now
                                     </button>

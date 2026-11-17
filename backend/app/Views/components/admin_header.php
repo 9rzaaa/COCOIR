@@ -7,8 +7,9 @@ $navItems = [
     ['href' => 'admin/dashboard',  'icon' => 'fa-tachometer-alt', 'label' => 'Dashboard'],
     ['href' => 'admin/storefront', 'icon' => 'fa-store',          'label' => 'Storefront'],
     ['href' => 'admin/products',   'icon' => 'fa-box-open',       'label' => 'Product Inventory'],
-    ['href' => 'admin/orders',     'icon' => 'fa-shopping-cart',  'label' => 'Orders'],
-    ['href' => 'admin/reports',    'icon' => 'fa-chart-bar',      'label' => 'Reports'],
+    ['href' => 'admin/orders',       'icon' => 'fa-shopping-cart',  'label' => 'Orders'],
+    ['href' => 'admin/integrations', 'icon' => 'fa-network-wired',  'label' => 'Integrations & API'],
+    ['href' => 'admin/reports',      'icon' => 'fa-chart-bar',      'label' => 'Reports'],
     ['href' => 'admin/accounts',   'icon' => 'fa-users',          'label' => 'Accounts'],
 ];
 ?>
