@@ -11,6 +11,12 @@ class WebhookEventModel extends Model
 
     protected $useTimestamps = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+        \App\Libraries\IntegrationSchemaGuard::ensure();
+    }
+
     protected $allowedFields = [
         'event_id',
         'provider',

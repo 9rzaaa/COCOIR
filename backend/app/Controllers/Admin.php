@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\OrderItemModel;
 use App\Models\OrderModel;
 use App\Models\ProductModel;
 use App\Models\UsersModel;
@@ -548,6 +549,8 @@ class Admin extends BaseController
     public function integrations()
     {
         if ($redirect = $this->requireAdmin()) return $redirect;
+
+        \App\Libraries\IntegrationSchemaGuard::ensure();
 
         $client       = new \App\Libraries\IntegrationHttpClient();
         $chaosConfig  = \App\Libraries\IntegrationHttpClient::getChaosConfig();

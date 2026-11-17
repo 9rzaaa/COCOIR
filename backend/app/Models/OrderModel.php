@@ -13,6 +13,12 @@ class OrderModel extends Model
     protected $useSoftDeletes = true;
     protected $dateFormat    = 'datetime';
 
+    public function __construct()
+    {
+        parent::__construct();
+        \App\Libraries\IntegrationSchemaGuard::ensure();
+    }
+
     protected $allowedFields = [
         'order_number',
         'user_id',
