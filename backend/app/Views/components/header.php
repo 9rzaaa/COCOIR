@@ -7,9 +7,10 @@
     // Cart count
     $cartModel  = new \App\Models\CartItemModel();
     $userId     = $sessionUser['id'] ?? null;
-    $conditions = $userId ? ['user_id' => $userId] : ['session_id' => session_id()];
+    $conditions = $userId ? ['user_id' => $userId] : ['session_id' => session()->get('cart_session_id') ?? session_id()];
     $result     = $cartModel->selectSum('quantity')->where($conditions)->first();
     $cartCount  = (int)($result['quantity'] ?? 0);
+    $cartTotal  = $cartCount;
     ?>
 
 <div class="flex justify-between items-center mx-auto max-w-7xl">
