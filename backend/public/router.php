@@ -9,6 +9,12 @@ if ($uri !== '/' && is_file($filePath)) {
     return false;
 }
 
+// Do NOT boot CodeIgniter or touch session cookies for missing static assets / favicon.ico
+if (preg_match('/\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|map|woff2?|ttf|eot)$/i', $uri)) {
+    http_response_code(404);
+    exit;
+}
+
 // Forward all other routes to CodeIgniter 4 front controller
 $_SERVER['SCRIPT_NAME'] = '/index.php';
 require_once __DIR__ . '/index.php';

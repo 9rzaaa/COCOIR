@@ -27,6 +27,7 @@ $routes->post('checkout/place', 'Users::placeOrder');
 // ── Orders ─────────────────────────────────────────────────────────────────
 $routes->get('orders', 'Users::orders');
 $routes->post('orders/pay', 'Users::submitPaymentProof');
+$routes->post('orders/paymongo-sandbox', 'Users::payWithPaymongoSandbox');
 $routes->post('orders/cancel', 'Users::cancelOrder');
 $routes->post('orders/refund', 'Users::requestRefund');
 $routes->post('orders/confirm', 'Users::confirmOrderReceived');
@@ -72,4 +73,17 @@ $routes->group('admin', function ($routes) {
     $routes->post('accounts/save', 'Admin::saveAccount');
     $routes->post('accounts/delete', 'Admin::deleteAccount');
     $routes->post('accounts/toggle', 'Admin::toggleAccountStatus');
+
+    // Systems Integration & Chaos Engineering Control Center
+    $routes->get('integrations', 'Admin::integrations');
+    $routes->post('integrations/chaos', 'Admin::toggleChaos');
+    $routes->post('integrations/demo', 'Admin::runFailureDemo');
+});
+
+// ── REST API v1 & Signed Webhooks (CLO 5 & CLO 6) ─────────────────────────
+$routes->group('api/v1', function ($routes) {
+    $routes->get('health', 'ApiIntegration::health');
+    $routes->post('webhooks/paymongo', 'ApiIntegration::paymongoWebhook', ['filter' => 'webhook_hmac']);
+    $routes->post('webhooks/courier', 'ApiIntegration::courierWebhook', ['filter' => 'webhook_hmac']);
+    $routes->get('orders/(:segment)/tracking', 'ApiIntegration::orderTracking/$1', ['filter' => 'api_auth']);
 });

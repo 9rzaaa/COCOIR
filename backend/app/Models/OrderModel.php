@@ -13,6 +13,12 @@ class OrderModel extends Model
     protected $useSoftDeletes = true;
     protected $dateFormat    = 'datetime';
 
+    public function __construct()
+    {
+        parent::__construct();
+        \App\Libraries\IntegrationSchemaGuard::ensure();
+    }
+
     protected $allowedFields = [
         'order_number',
         'user_id',
@@ -35,6 +41,15 @@ class OrderModel extends Model
         'refund_reason',
         'refund_proof',
         'refund_qr',
+        'payment_reference',
+        'payment_checkout_url',
+        'idempotency_key',
+        'stock_deducted',
+        'courier_code',
+        'tracking_number',
+        'tracking_status',
+        'tracking_history',
+        'tracking_synced_at',
     ];
 
     // ── Get all orders for a user with their items ────────────────────
@@ -92,9 +107,16 @@ class OrderModel extends Model
     }
 
 
-    // ── Place a new order from cart items ─────────────────────────────
+    // ── Place a new order from cart items (Idempotent) ────────────────
     public function placeOrder(array $data, array $cartItems): int|false
     {
+        if (!empty($data['idempotency_key'])) {
+            $existing = $this->where('idempotency_key', $data['idempotency_key'])->first();
+            if ($existing) {
+                return (int) $existing['id'];
+            }
+        }
+
         $db = \Config\Database::connect();
         $db->transStart();
 
@@ -107,23 +129,28 @@ class OrderModel extends Model
         $shipping = (float)($data['shipping_amount'] ?? 0);
 
         $orderId = $this->insert([
-            'order_number'    => $orderNumber,
-            'user_id'         => $data['user_id'],
-            'status'          => $data['payment_method'] === 'cod' ? 'to_ship' : 'to_pay',
-            'payment_method'  => $data['payment_method'],
-            'payment_status'  => $data['payment_method'] === 'cod' ? 'pending' : 'pending',
-            'payment_proof'   => $data['payment_proof'] ?? null,
-            'receive_method'  => $data['receive_method'],
-            'recipient_name'  => $data['recipient_name']  ?? null,
-            'recipient_phone' => $data['recipient_phone'] ?? null,
-            'recipient_email' => $data['recipient_email'] ?? null,
-            'address'         => $data['address']         ?? null,
-            'city'            => $data['city']            ?? null,
-            'postal_code'     => $data['postal_code']     ?? null,
-            'order_notes'     => $data['order_notes']     ?? null,
-            'subtotal'        => $subtotal,
-            'shipping_amount' => $shipping,
-            'total_amount'    => $subtotal + $shipping,
+            'order_number'         => $orderNumber,
+            'user_id'              => $data['user_id'],
+            'status'               => $data['payment_method'] === 'cod' ? 'to_ship' : 'to_pay',
+            'payment_method'       => $data['payment_method'],
+            'payment_status'       => $data['payment_method'] === 'cod' ? 'pending' : 'pending',
+            'payment_proof'        => $data['payment_proof'] ?? null,
+            'payment_reference'    => $data['payment_reference'] ?? null,
+            'payment_checkout_url' => $data['payment_checkout_url'] ?? null,
+            'idempotency_key'      => $data['idempotency_key'] ?? null,
+            'stock_deducted'       => 0,
+            'courier_code'         => $data['courier_code'] ?? 'cocoexpress',
+            'receive_method'       => $data['receive_method'],
+            'recipient_name'       => $data['recipient_name']  ?? null,
+            'recipient_phone'      => $data['recipient_phone'] ?? null,
+            'recipient_email'      => $data['recipient_email'] ?? null,
+            'address'              => $data['address']         ?? null,
+            'city'                 => $data['city']            ?? null,
+            'postal_code'          => $data['postal_code']     ?? null,
+            'order_notes'          => $data['order_notes']     ?? null,
+            'subtotal'             => $subtotal,
+            'shipping_amount'      => $shipping,
+            'total_amount'         => $subtotal + $shipping,
         ]);
 
         if (!$orderId) {
@@ -148,5 +175,36 @@ class OrderModel extends Model
         $db->transComplete();
 
         return $db->transStatus() ? $orderId : false;
+    }
+
+    // ── Idempotent Stock Deduction upon Payment / Order Confirmation ──
+    public function deductStockIdempotent(int $orderId): bool
+    {
+        $order = $this->find($orderId);
+        if (!$order || !empty($order['stock_deducted'])) {
+            return false;
+        }
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $itemModel    = new OrderItemModel();
+        $productModel = new ProductModel();
+        $items        = $itemModel->where('order_id', $orderId)->findAll();
+
+        foreach ($items as $item) {
+            if (!empty($item['product_id'])) {
+                $prod = $productModel->find($item['product_id']);
+                if ($prod) {
+                    $newStock = max(0, (int) $prod['stock'] - (int) $item['quantity']);
+                    $productModel->update($prod['id'], ['stock' => $newStock]);
+                }
+            }
+        }
+
+        $this->update($orderId, ['stock_deducted' => 1]);
+        $db->transComplete();
+
+        return $db->transStatus();
     }
 }

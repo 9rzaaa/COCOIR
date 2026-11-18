@@ -302,38 +302,38 @@ $total    = $subtotal + $shipping;
                         <div class="flex flex-col items-center gap-4 bg-gradient-to-br from-coco-orange/5 to-coco-amber/5 p-6 border border-coco-orange/20 rounded-2xl">
                             <p class="font-semibold text-coco-brown text-sm text-center">Scan to pay using GCash, Maya, or any InstaPay-enabled app</p>
 
-                            <div class="shadow-xl border-4 border-white rounded-2xl overflow-hidden qr-pulse">
-                                <div class="flex justify-center items-center bg-white w-48 h-48">
-                                    <svg viewBox="0 0 100 100" class="w-40 h-40" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="100" height="100" fill="white"/>
-                                        <rect x="10" y="10" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3"/>
-                                        <rect x="15" y="15" width="20" height="20" fill="#3B2314"/>
-                                        <rect x="60" y="10" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3"/>
-                                        <rect x="65" y="15" width="20" height="20" fill="#3B2314"/>
-                                        <rect x="10" y="60" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3"/>
-                                        <rect x="15" y="65" width="20" height="20" fill="#3B2314"/>
-                                        <rect x="60" y="55" width="5" height="5" fill="#3B2314"/>
-                                        <rect x="70" y="55" width="5" height="5" fill="#3B2314"/>
-                                        <rect x="65" y="60" width="5" height="5" fill="#3B2314"/>
-                                        <rect x="80" y="60" width="5" height="5" fill="#3B2314"/>
-                                        <rect x="60" y="65" width="5" height="5" fill="#3B2314"/>
-                                        <rect x="75" y="65" width="10" height="5" fill="#3B2314"/>
-                                        <rect x="60" y="75" width="10" height="5" fill="#3B2314"/>
-                                        <rect x="75" y="70" width="5" height="10" fill="#3B2314"/>
-                                        <rect x="85" y="75" width="5" height="10" fill="#3B2314"/>
-                                        <text x="50" y="54" text-anchor="middle" font-size="5" fill="#E87722" font-family="sans-serif" font-weight="bold">COCOIR</text>
+                            <div class="shadow-xl border-4 border-white rounded-2xl overflow-hidden qr-pulse bg-white p-3">
+                                <div class="flex flex-col justify-center items-center bg-white w-48 h-48 relative">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=3B2314&bgcolor=FFFFFF&data=<?= urlencode('paymongo://qrph/merchant/cocoir-eco-ph?amount=' . number_format($total, 2, '.', '') . '&currency=PHP') ?>"
+                                         alt="PayMongo QR Ph Code"
+                                         class="w-44 h-44 object-contain"
+                                         onerror="this.style.display='none'; document.getElementById('fallback-qr-svg').classList.remove('hidden');">
+                                    <svg id="fallback-qr-svg" viewBox="0 0 29 29" class="hidden w-44 h-44" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="29" height="29" fill="#FFFFFF"/>
+                                        <!-- Finder Patterns -->
+                                        <path fill="#3B2314" d="M1,1 h7 v7 h-7 z M2,2 v5 h5 v-5 z M3,3 h3 v3 h-3 z M21,1 h7 v7 h-7 z M22,2 v5 h5 v-5 z M23,3 h3 v3 h-3 z M1,21 h7 v7 h-7 z M2,22 v5 h5 v-5 z M3,23 h3 v3 h-3 z"/>
+                                        <!-- Timing & Alignment Modules -->
+                                        <path fill="#3B2314" d="M9,1 h2 v1 h-2 z M12,1 h1 v2 h-1 z M15,1 h2 v1 h-2 z M18,1 h2 v2 h-2 z M9,3 h1 v2 h-1 z M11,4 h3 v1 h-3 z M15,3 h2 v2 h-2 z M19,4 h1 v2 h-1 z M9,6 h2 v1 h-2 z M12,6 h2 v1 h-2 z M16,6 h1 v1 h-1 z M18,6 h2 v1 h-2 z M1,9 h2 v1 h-2 z M4,9 h1 v2 h-1 z M6,9 h2 v1 h-2 z M9,9 h3 v2 h-3 z M13,9 h2 v1 h-2 z M16,9 h3 v2 h-3 z M20,9 h2 v1 h-2 z M23,9 h2 v2 h-2 z M26,9 h2 v1 h-2 z M1,11 h1 v2 h-1 z M3,12 h2 v1 h-2 z M6,11 h1 v3 h-1 z M8,12 h2 v1 h-2 z M19,12 h2 v1 h-2 z M22,11 h2 v2 h-2 z M25,12 h3 v1 h-3 z M1,14 h3 v1 h-3 z M5,15 h2 v1 h-2 z M8,14 h2 v2 h-2 z M19,14 h2 v2 h-2 z M22,15 h2 v1 h-2 z M26,14 h2 v2 h-2 z M1,17 h2 v2 h-2 z M4,17 h3 v1 h-3 z M8,18 h2 v1 h-2 z M11,18 h2 v2 h-2 z M15,18 h2 v1 h-2 z M18,17 h3 v2 h-3 z M22,17 h2 v1 h-2 z M25,18 h3 v1 h-3 z M9,20 h2 v2 h-2 z M12,21 h3 v1 h-3 z M16,20 h2 v2 h-2 z M20,20 h5 v5 h-5 z M21,21 v3 h3 v-3 z M22,22 h1 v1 h-1 z M26,20 h2 v2 h-2 z M9,23 h3 v1 h-3 z M13,23 h2 v2 h-2 z M17,23 h2 v1 h-2 z M26,23 h1 v3 h-1 z M9,25 h1 v3 h-1 z M11,26 h3 v2 h-3 z M15,26 h2 v1 h-2 z M18,25 h2 v3 h-2 z M21,26 h3 v2 h-3 z M25,27 h3 v1 h-3 z"/>
+                                        <!-- Center Brand Badge -->
+                                        <rect x="10" y="11" width="9" height="6" rx="1" fill="#FFFFFF" stroke="#E87722" stroke-width="0.6"/>
+                                        <text x="14.5" y="15" text-anchor="middle" font-size="2.6" fill="#3B2314" font-family="sans-serif" font-weight="bold">COCOIR</text>
                                     </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <span class="bg-white/95 border border-coco-orange px-2 py-0.5 rounded-md font-display font-black text-[10px] text-coco-brown shadow-sm">
+                                            QR Ph · COCOIR
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="space-y-1 text-center">
-                                <p class="text-coco-mid text-xs">Account Name: <strong class="text-coco-brown">COCOIR Co.</strong></p>
-                                <p class="text-coco-mid text-xs">Account Number: <strong class="text-coco-brown">09XX XXX XXXX</strong></p>
+                                <p class="text-coco-mid text-xs">Merchant: <strong class="text-coco-brown">COCOIR Eco-Enterprise Inc. (PayMongo Verified)</strong></p>
+                                <p class="text-coco-mid text-xs">InstaPay / GCash / Maya MID: <strong class="font-mono text-coco-brown">PM-QRPH-0917-882-6264</strong></p>
                             </div>
 
                             <div class="bg-white p-3 border border-coco-sand rounded-xl w-full text-coco-mid text-xs text-center">
-                                <i class="mr-1 text-coco-orange fas fa-info-circle"></i>
-                                After payment, upload your screenshot below. Your order will be confirmed once payment is verified.
+                                <i class="mr-1 text-coco-orange fas fa-bolt"></i>
+                                You can <strong>Place Order immediately</strong> to pay via <strong>PayMongo Sandbox API (Webhook verified)</strong>, or optionally attach a manual payment screenshot below.
                             </div>
 
                             <!-- Screenshot upload — name="payment_screenshot" is inside the form now -->
@@ -407,10 +407,13 @@ $total    = $subtotal + $shipping;
                             </span>
                         </div>
 
-                        <button type="submit"
-                            class="bg-coco-orange hover:bg-coco-dark shadow-coco-orange/25 shadow-lg hover:shadow-xl py-4 rounded-full w-full font-bold text-white text-lg transition-all hover:-translate-y-0.5 duration-300">
+                        <button type="submit" id="place-order-btn"
+                            class="bg-coco-orange hover:bg-coco-dark shadow-coco-orange/25 shadow-lg hover:shadow-xl py-4 rounded-full w-full font-bold text-white text-lg transition-all hover:-translate-y-0.5 duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                             Place Order
                         </button>
+                        <p id="proof-hint" class="mt-3 text-coco-mid text-xs text-center font-semibold">
+                            <i class="fas fa-bolt text-coco-orange mr-1"></i> Creates a PayMongo Checkout Session automatically (or attach screenshot).
+                        </p>
 
                         <div class="flex justify-center items-center gap-2 mt-4 text-coco-mid/70 text-xs">
                             <i class="text-coco-green fas fa-shield-alt"></i>
@@ -424,6 +427,27 @@ $total    = $subtotal + $shipping;
                 </div>
             </div>
 
+            <!-- Order Placed Modal -->
+<div id="order-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-coco-brown/60 backdrop-blur-sm"></div>
+    <div id="order-modal-card" class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md p-10 text-center space-y-5 scale-90 opacity-0 transition-all duration-300">
+        <div class="w-20 h-20 bg-coco-green/15 rounded-full flex items-center justify-center mx-auto">
+            <i class="fas fa-check text-coco-green text-4xl"></i>
+        </div>
+        <div>
+            <h3 class="font-display font-black text-3xl text-coco-brown mb-2">Order Placed!</h3>
+            <p class="text-coco-mid text-sm leading-relaxed">
+                Thank you for shopping with COCOIR. You can track your order on the next page.
+            </p>
+        </div>
+        <a id="order-modal-link" href="#"
+           class="block bg-coco-orange hover:bg-coco-dark text-white font-bold py-3 rounded-full transition-colors">
+            Track My Order
+        </a>
+        <p class="text-coco-mid/70 text-xs">Redirecting in <span id="order-countdown">4</span>s…</p>
+    </div>
+</div>
+
         </div><!-- /grid -->
     </form><!-- /checkout-form -->
 
@@ -435,24 +459,114 @@ $total    = $subtotal + $shipping;
 const subtotal = <?= $subtotal ?>;
 const shipping = <?= $shipping ?>;
 
-// ── Sync visible fields into hidden inputs before submit ──
-document.getElementById('checkout-form').addEventListener('submit', function(e) {
-    const receive = document.getElementById('hidden-receive').value;
+// ── Enable Place Order (PayMongo API session created on submit; screenshot optional) ──
+function updatePlaceOrderState() {
+    const btn  = document.getElementById('place-order-btn');
+    const hint = document.getElementById('proof-hint');
+    const method = document.getElementById('hidden-payment').value;
+    btn.disabled = false;
+    if (hint) {
+        hint.classList.toggle('hidden', method === 'cod');
+    }
+}
+document.addEventListener('DOMContentLoaded', updatePlaceOrderState);
 
-    if (receive === 'pickup') {
-        // For pickup, use pickup contact fields
+// ── Order placed popup ──
+function showOrderModal(nextUrl) {
+    const modal = document.getElementById('order-modal');
+    const card  = document.getElementById('order-modal-card');
+    document.getElementById('order-modal-link').href = nextUrl;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    requestAnimationFrame(() => {
+        card.classList.remove('scale-90', 'opacity-0');
+        card.classList.add('scale-100', 'opacity-100');
+    });
+
+    let seconds = 4;
+    const counter = document.getElementById('order-countdown');
+    const timer = setInterval(() => {
+        seconds--;
+        counter.textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = nextUrl;
+        }
+    }, 1000);
+}
+
+// ── Submit order in the background, then show the popup ──
+document.getElementById('checkout-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (document.getElementById('place-order-btn').disabled) return;
+
+    const form = this;
+    const btn  = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+
+    // For pickup, copy the pickup contact fields into the delivery fields
+    if (document.getElementById('hidden-receive').value === 'pickup') {
         const pickupName  = document.getElementById('field-pickup_name');
         const pickupPhone = document.getElementById('field-pickup_phone');
-        // Split name into first/last best-effort
         const nameParts = (pickupName?.value ?? '').trim().split(' ');
-        document.querySelector('[name="first_name"]') && (document.querySelector('[name="first_name"]').value = nameParts[0] ?? '');
-        document.querySelector('[name="last_name"]')  && (document.querySelector('[name="last_name"]').value  = nameParts.slice(1).join(' ') ?? '');
-        document.querySelector('[name="phone"]')      && (document.querySelector('[name="phone"]').value      = pickupPhone?.value ?? '');
-        document.querySelector('[name="address"]')    && (document.querySelector('[name="address"]').value    = 'Store Pickup — COCOIR, 67 Conti Ave., Quezon City');
-        document.querySelector('[name="city"]')       && (document.querySelector('[name="city"]').value       = 'Quezon City');
-        document.querySelector('[name="zip"]')        && (document.querySelector('[name="zip"]').value        = '1100');
+        form.querySelector('[name="first_name"]').value = nameParts[0] ?? '';
+        form.querySelector('[name="last_name"]').value  = nameParts.slice(1).join(' ');
+        form.querySelector('[name="phone"]').value      = pickupPhone?.value ?? '';
+        form.querySelector('[name="address"]').value    = 'Store Pickup — COCOIR, 67 Conti Ave., Quezon City';
+        form.querySelector('[name="city"]').value       = 'Quezon City';
+        form.querySelector('[name="zip"]').value        = '1100';
     }
-    // Delivery fields are already named correctly and inside the form — no extra sync needed
+
+    btn.disabled = true;
+    btn.textContent = 'Placing order...';
+
+    try {
+        const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        console.log('Order response:', res.status, res.url, res.redirected, contentType);
+
+        // Case 1: server answers with JSON
+        if (contentType.includes('application/json')) {
+            const data = await res.json();
+            console.log('Order JSON:', data);
+            const next = data.redirect || data.redirect_url || data.url || data.next;
+            if (data.success !== false && next) {
+                showOrderModal(next);
+                return;
+            }
+            throw new Error(data.message || 'The order was not accepted.');
+        }
+
+        // Case 2: CSRF / session problem
+        if (res.status === 403) {
+            throw new Error('Your session expired. Please refresh the page and try again.');
+        }
+
+        // Case 3: server redirected us somewhere
+        const path = new URL(res.url).pathname.replace(/\/+$/, '');
+        const backOnCheckout = path.endsWith('/checkout') || path.endsWith('/checkout/place');
+
+        if (res.ok && res.redirected && !backOnCheckout) {
+            showOrderModal(res.url);
+            return;
+        }
+        if (res.redirected) {
+            window.location.href = res.url;
+            return;
+        }
+
+        throw new Error('Unexpected server response (status ' + res.status + ').');
+    } catch (err) {
+        console.error(err);
+        alert(err.message || 'Could not place your order. Please try again.');
+        btn.textContent = originalText;
+        updatePlaceOrderState();
+    }
 });
 
 function switchReceive(method) {
@@ -501,6 +615,8 @@ function switchPayment(method) {
     cod.classList.toggle('border-coco-orange',      method === 'cod');
     cod.classList.toggle('bg-coco-orange/5',        method === 'cod');
     cod.classList.toggle('border-coco-sand',        method !== 'cod');
+
+    updatePlaceOrderState();
 }
 
 function previewScreenshot(input) {
@@ -513,7 +629,10 @@ function previewScreenshot(input) {
             preview.classList.remove('hidden');
         };
         reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.classList.add('hidden');
     }
+    updatePlaceOrderState();
 }
 </script>
 

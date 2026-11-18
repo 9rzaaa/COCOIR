@@ -65,6 +65,8 @@ class Auth extends BaseController
             return redirect()->back()->withInput();
         }
 
+        $guestCartSessionId = $session->get('cart_session_id');
+
         $session->set('user', [
             'id'            => $userArr['id'] ?? null,
             'username'      => $userArr['username'] ?? null,
@@ -75,6 +77,18 @@ class Auth extends BaseController
             'display_name'  => trim(($userArr['first_name'] ?? '') . ' ' . ($userArr['last_name'] ?? '')),
             'profile_image' => $userArr['profile_image'] ?? null,
         ]);
+
+        // Merge any guest cart items into the logged-in user's persistent cart
+        if (!empty($guestCartSessionId) && !empty($userArr['id'])) {
+            try {
+                $db = \Config\Database::connect();
+                $db->table('cart_items')
+                    ->where('session_id', $guestCartSessionId)
+                    ->update(['user_id' => $userArr['id'], 'session_id' => null]);
+            } catch (\Throwable $e) {
+                // ignore cart merge errors
+            }
+        }
 
         $type = strtolower($userArr['type'] ?? 'client');
         if ($type === 'admin') {

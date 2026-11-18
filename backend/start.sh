@@ -11,6 +11,13 @@ php spark migrate --all || true
 echo "Seeding initial COCOIR data (idempotent)..."
 php spark db:seed DatabaseSeeder || true
 
+if [ -f "courier-service/index.php" ]; then
+    mkdir -p courier-service/data
+    chmod -R 777 courier-service/data 2>/dev/null || true
+    echo "Starting standalone CocoExpress Courier Microservice on 127.0.0.1:8095..."
+    php -S "127.0.0.1:8095" courier-service/index.php >/dev/null 2>&1 &
+fi
+
 PORT="${PORT:-8080}"
 echo "Starting COCOIR web server on 0.0.0.0:${PORT}..."
 exec php -S "0.0.0.0:${PORT}" -t public public/router.php

@@ -121,6 +121,21 @@ $statusBadge = [
             </div>
         </div>
 
+        <!-- Flash banners for Payment Gateway / Courier API status -->
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="mb-6 bg-green-50 border-2 border-green-300 text-green-800 px-5 py-4 rounded-2xl flex items-start gap-3 shadow-sm">
+                <i class="fas fa-check-circle text-green-600 text-lg mt-0.5"></i>
+                <div class="text-sm font-semibold"><?= esc(session()->getFlashdata('success')) ?></div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="mb-6 bg-amber-50 border-2 border-amber-400 text-amber-900 px-5 py-4 rounded-2xl flex items-start gap-3 shadow-sm">
+                <i class="fas fa-exclamation-triangle text-amber-600 text-lg mt-0.5"></i>
+                <div class="text-sm font-semibold"><?= esc(session()->getFlashdata('error')) ?></div>
+            </div>
+        <?php endif; ?>
+
         <!-- Tab bar -->
         <div class="bg-white shadow-sm mb-8 border border-coco-sand/60 rounded-2xl overflow-x-auto">
             <div class="flex px-2 min-w-max">
@@ -230,6 +245,40 @@ $statusBadge = [
                                         <?php endif; ?>
                                     <?php endforeach; ?>
                                 </div>
+
+                                <?php if (!empty($order['tracking_number'])):
+                                    $liveTrack   = $order['live_tracking'] ?? null;
+                                    $isDegraded  = !empty($liveTrack['degraded']);
+                                    $checkpoints = $liveTrack['tracking']['checkpoints'] ?? (json_decode($order['tracking_history'] ?? '[]', true) ?: []);
+                                ?>
+                                    <div class="mt-4 pt-3 border-t border-coco-sand/30 bg-coco-cream/40 rounded-2xl p-3.5">
+                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                            <div class="flex items-center gap-2 text-xs">
+                                                <i class="fas fa-shipping-fast text-coco-orange"></i>
+                                                <span class="font-bold text-coco-brown">CocoExpress Waybill:</span>
+                                                <code class="bg-white px-2 py-0.5 rounded border border-coco-sand font-mono font-bold text-coco-orange"><?= esc($order['tracking_number']) ?></code>
+                                            </div>
+                                            <?php if ($isDegraded): ?>
+                                                <span class="bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                                    <i class="fas fa-life-ring text-[9px]"></i> Graceful Fallback: Showing Cached Tracking (Courier API Unavailable)
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                                    <i class="fas fa-bolt text-[9px]"></i> Live Synced via Courier API v1
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php if (!empty($checkpoints)):
+                                            $latestCp = end($checkpoints);
+                                        ?>
+                                            <div class="text-xs text-coco-mid">
+                                                <strong class="text-coco-brown uppercase text-[10px]"><?= esc($latestCp['status'] ?? '') ?></strong>
+                                                · <?= esc($latestCp['location'] ?? '') ?> — <?= esc($latestCp['description'] ?? '') ?>
+                                                <span class="text-[10px] text-coco-tan ml-1">(<?= esc($latestCp['timestamp'] ?? '') ?>)</span>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 
@@ -247,6 +296,13 @@ $statusBadge = [
                                     View Details
                                 </button>
                                 <?php if ($order['status'] === 'to_pay'): ?>
+                                    <form action="<?= site_url('orders/paymongo-sandbox') ?>" method="POST" class="contents">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full font-bold text-white text-xs transition-colors flex items-center gap-1.5">
+                                            <i class="fas fa-bolt text-[10px]"></i> PayMongo Sandbox
+                                        </button>
+                                    </form>
                                     <button onclick="openPayModal(<?= $order['id'] ?>)" class="bg-coco-orange hover:bg-coco-dark px-4 py-2 rounded-full font-bold text-white text-xs transition-colors">
                                         Pay Now
                                     </button>
@@ -332,29 +388,13 @@ $statusBadge = [
                     <div class="space-y-3 pt-2 text-center">
                         <p class="font-bold text-coco-brown text-sm">Scan to Pay via InstaPay / GCash / Maya</p>
                         <div class="flex justify-center">
-                            <div class="inline-block bg-white shadow-sm p-2 border-2 border-coco-orange rounded-xl">
-                                <svg viewBox="0 0 100 100" class="w-40 h-40" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="100" height="100" fill="white" />
-                                    <rect x="10" y="10" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3" />
-                                    <rect x="15" y="15" width="20" height="20" fill="#3B2314" />
-                                    <rect x="60" y="10" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3" />
-                                    <rect x="65" y="15" width="20" height="20" fill="#3B2314" />
-                                    <rect x="10" y="60" width="30" height="30" fill="none" stroke="#3B2314" stroke-width="3" />
-                                    <rect x="15" y="65" width="20" height="20" fill="#3B2314" />
-                                    <rect x="60" y="55" width="5" height="5" fill="#3B2314" />
-                                    <rect x="70" y="55" width="5" height="5" fill="#3B2314" />
-                                    <rect x="65" y="60" width="5" height="5" fill="#3B2314" />
-                                    <rect x="80" y="60" width="5" height="5" fill="#3B2314" />
-                                    <rect x="60" y="65" width="5" height="5" fill="#3B2314" />
-                                    <rect x="75" y="65" width="10" height="5" fill="#3B2314" />
-                                    <rect x="60" y="75" width="10" height="5" fill="#3B2314" />
-                                    <rect x="75" y="70" width="5" height="10" fill="#3B2314" />
-                                    <rect x="85" y="75" width="5" height="10" fill="#3B2314" />
-                                    <text x="50" y="54" text-anchor="middle" font-size="5" fill="#E87722" font-family="sans-serif" font-weight="bold">COCOIR</text>
-                                </svg>
+                            <div class="inline-block bg-white shadow-sm p-3 border-2 border-coco-orange rounded-xl relative">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=3B2314&bgcolor=FFFFFF&data=<?= urlencode('paymongo://qrph/merchant/cocoir-eco-ph') ?>"
+                                     alt="PayMongo QR Ph Code"
+                                     class="w-40 h-40 object-contain">
                             </div>
                         </div>
-                        <p class="text-coco-mid text-xs">Account: <strong class="text-coco-brown">COCOIR Co. / 09XX-XXX-XXXX</strong></p>
+                        <p class="text-coco-mid text-xs">Merchant: <strong class="text-coco-brown">COCOIR Eco-Enterprise Inc. (MID: PM-QRPH-0917-882-6264)</strong></p>
                     </div>
 
                     <!-- Upload Proof -->

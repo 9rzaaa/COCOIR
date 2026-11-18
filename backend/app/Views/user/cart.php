@@ -144,76 +144,101 @@ $isLoggedIn = session()->has('user'); // pass login state to JS
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="right-6 bottom-6 z-[9998] fixed opacity-0 transition-all translate-y-24 duration-300">
-        <div class="flex items-center gap-3 bg-coco-brown shadow-2xl px-6 py-3 rounded-2xl font-semibold text-coco-cream text-sm">
-            <i class="text-coco-leaf fas fa-check-circle"></i>
-            <span id="toast-msg">Updated!</span>
-        </div>
+<div id="toast" class="fixed bottom-6 right-6 z-[9998] transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
+    <div class="bg-coco-brown text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+        <i class="fas fa-check-circle text-coco-amber"></i>
+        <span id="toast-msg" class="text-sm font-semibold"></span>
     </div>
+</div>
 
     <script>
-        // ── Is user logged in? (from PHP session) ──
-        const isLoggedIn = <?= $isLoggedIn ? 'true' : 'false' ?>;
-        const checkoutUrl = '<?= site_url('checkout') ?>';
+    // ── Is user logged in? (from PHP session) ──
+    const isLoggedIn = <?= $isLoggedIn ? 'true' : 'false' ?>;
+    const checkoutUrl = '<?= site_url('checkout') ?>';
 
-        function proceedToCheckout() {
-            if (isLoggedIn) {
-                window.location.href = checkoutUrl;
-            } else {
-                // Show login prompt modal
-                const modal = document.getElementById('login-modal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        }
-
-        function closeLoginModal() {
+    function proceedToCheckout() {
+        if (isLoggedIn) {
+            window.location.href = checkoutUrl;
+        } else {
+            // Show login prompt modal
             const modal = document.getElementById('login-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
+    }
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeLoginModal();
-        });
+    function closeLoginModal() {
+        const modal = document.getElementById('login-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 
-        // ── Cart API ──
-        async function updateCartAPI(url, data) {
-            const csrfToken = document.querySelector('.csrf-token');
-            data.append(csrfToken.name, csrfToken.value);
-            try {
-                const response = await fetch(url, {
-                    method: 'POST', body: data,
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-                const result = await response.json();
-                if (result.success) {
-                    window.location.reload();
-                } else {
-                    alert(result.message || 'An error occurred.');
-                    if (response.status === 403) window.location.reload();
-                }
-            } catch (error) {
-                console.error('Cart API Error:', error);
-                alert('Could not update cart. Please try again.');
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLoginModal();
+    });
+
+    // ── Toast (same style as landing page) ──
+    function showToast(msg, isError = false) {
+        const toast = document.getElementById('toast');
+        const inner = toast.querySelector('div');
+        document.getElementById('toast-msg').textContent = msg;
+        inner.className = inner.className.replace(/bg-\S+/, isError ? 'bg-red-600' : 'bg-coco-brown');
+        toast.classList.remove('translate-y-24', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        setTimeout(() => {
+            toast.classList.add('translate-y-24', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 3000);
+    }
+
+    // Show a message saved before the page reload
+    try {
+        const pending = sessionStorage.getItem('cartToast');
+        if (pending) {
+            sessionStorage.removeItem('cartToast');
+            showToast(pending);
+        }
+    } catch (e) {}
+
+    // ── Cart API ──
+    async function updateCartAPI(url, data, successMsg) {
+        const csrfToken = document.querySelector('.csrf-token');
+        data.append(csrfToken.name, csrfToken.value);
+        try {
+            const response = await fetch(url, {
+                method: 'POST', body: data,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                try { sessionStorage.setItem('cartToast', successMsg); } catch (e) {}
+                window.location.reload();
+            } else {
+                showToast(result.message || 'An error occurred.', true);
+                if (response.status === 403) setTimeout(() => window.location.reload(), 1500);
             }
+        } catch (error) {
+            console.error('Cart API Error:', error);
+            showToast('Could not update cart. Please try again.', true);
         }
+    }
 
-        function updateQty(id, quantity) {
-            const q = parseInt(quantity, 10);
-            if (isNaN(q) || q < 1) { removeItem(id); return; }
-            const fd = new FormData();
-            fd.append('id', id);
-            fd.append('quantity', q);
-            updateCartAPI('<?= site_url('cart/update') ?>', fd);
-        }
+    function updateQty(id, quantity) {
+        const q = parseInt(quantity, 10);
+        if (isNaN(q) || q < 1) { removeItem(id); return; }
+        const fd = new FormData();
+        fd.append('id', id);
+        fd.append('quantity', q);
+        updateCartAPI('<?= site_url('cart/update') ?>', fd, 'Cart updated!');
+    }
 
-        function removeItem(id) {
-            if (!confirm('Remove this item from your cart?')) return;
-            const fd = new FormData();
-            fd.append('id', id);
-            updateCartAPI('<?= site_url('cart/remove') ?>', fd);
-        }
-    </script>
+    function removeItem(id) {
+        const nameEl = document.querySelector('.cart-item[data-id="' + id + '"] h4');
+        const name = nameEl ? nameEl.textContent.trim() : 'Item';
+        const fd = new FormData();
+        fd.append('id', id);
+        updateCartAPI('<?= site_url('cart/remove') ?>', fd, '"' + name + '" removed from cart.');
+    }
+</script>
 </body>
 </html>

@@ -34,6 +34,8 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'webhook_hmac'  => \App\Filters\WebhookSignatureFilter::class,
+        'api_auth'      => \App\Filters\ApiKeyAuthFilter::class,
     ];
 
     /**

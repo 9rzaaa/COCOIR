@@ -12,9 +12,15 @@ services:
       - /var/www/html/vendor
     environment:
       CI_ENVIRONMENT: development
+      COURIER_API_URL: http://courier:8095/api/v1
+      COURIER_API_KEY: ck_live_cocoexpress_2026_secret_token
+      COURIER_WEBHOOK_SECRET: whsec_cocoexpress_courier_hmac_2026
+      PAYMONGO_WEBHOOK_SECRET: whsec_cocoir_paymongo_hmac_secret_2026
     depends_on:
       mysql:
         condition: service_healthy
+      courier:
+        condition: service_started
     # Compose Watch: sync source; rebuild on dependency updates
     develop:
       watch:
@@ -76,6 +82,19 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  courier:
+    build:
+      context: ./courier-service
+      dockerfile: Dockerfile
+    init: true
+    ports:
+      - "8095:8095"
+    environment:
+      COURIER_API_KEY: ck_live_cocoexpress_2026_secret_token
+      COURIER_WEBHOOK_SECRET: whsec_cocoexpress_courier_hmac_2026
+    volumes:
+      - ./courier-service:/srv/courier:cached
 
 volumes:
   silver_mysql_data:
