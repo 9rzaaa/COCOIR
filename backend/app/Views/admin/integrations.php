@@ -63,6 +63,13 @@ $orders      = $orders ?? [];
                     <i class="fas fa-sync-alt"></i> Reset All to Healthy
                 </button>
             </form>
+            <form action="<?= site_url('admin/integrations/chaos') ?>" method="POST" onsubmit="return confirm('Clear all orders, carts, webhook events, and integration logs for a fresh demo?');">
+                <?= csrf_field() ?>
+                <input type="hidden" name="action" value="clear_demo_data">
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-colors">
+                    <i class="fas fa-trash-alt"></i> Clear Orders &amp; Logs
+                </button>
+            </form>
         </div>
     </div>
 

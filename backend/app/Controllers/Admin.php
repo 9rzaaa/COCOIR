@@ -606,6 +606,26 @@ class Admin extends BaseController
             return redirect()->to('/admin/integrations');
         }
 
+        if ($action === 'clear_demo_data') {
+            $db = \Config\Database::connect();
+            foreach (['order_items', 'orders', 'cart_items', 'integration_logs', 'webhook_events'] as $tbl) {
+                if ($db->tableExists($tbl)) {
+                    $db->table($tbl)->emptyTable();
+                }
+            }
+            // Reset product stock back to default full inventory
+            if ($db->tableExists('products')) {
+                $db->query("UPDATE products SET stock = 100 WHERE stock < 100");
+            }
+            @unlink(WRITEPATH . 'cache/cocoexpress_shipments.json');
+            \App\Libraries\IntegrationHttpClient::setChaosMode('paymongo', 'normal');
+            \App\Libraries\IntegrationHttpClient::setChaosMode('cocoexpress_courier', 'normal');
+            \App\Libraries\IntegrationHttpClient::resetAllCircuits();
+
+            session()->setFlashdata('success', 'Database cleared for fresh demo! All orders, cart items, webhook events, and integration logs were wiped and product stock restored.');
+            return redirect()->to('/admin/integrations');
+        }
+
         $service = $this->request->getPost('service');
         $mode    = $this->request->getPost('mode');
 
