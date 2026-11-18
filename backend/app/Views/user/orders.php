@@ -190,7 +190,12 @@ $statusBadge = [
                                     <div class="text-coco-mid text-xs"><?= esc(date('M d, Y', strtotime($order['created_at'] ?? 'now'))) ?></div>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <?php if (!empty($order['payment_reference'])): ?>
+                                    <span class="bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold rounded-full px-2.5 py-0.5 flex items-center gap-1">
+                                        <i class="fas fa-link text-[9px]"></i> PayMongo: <?= esc($order['payment_reference']) ?>
+                                    </span>
+                                <?php endif; ?>
                                 <span class="<?= $badge['bg'] ?> <?= $badge['text'] ?> text-[10px] font-black tracking-wide uppercase rounded-full px-3 py-1">
                                     <?= $badge['label'] ?>
                                 </span>

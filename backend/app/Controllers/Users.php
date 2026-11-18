@@ -286,6 +286,10 @@ class Users extends BaseController
         if ($paymentMethod === 'cod') {
             $orderModel->deductStockIdempotent((int) $orderId);
             session()->setFlashdata('success', 'COD Order ' . ($createdOrder['order_number'] ?? '') . ' placed and inventory reserved! 🥥');
+            $targetUrl = site_url('orders?tab=to_ship');
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => true, 'redirect' => $targetUrl]);
+            }
             return redirect()->to('/orders?tab=to_ship');
         }
 
@@ -312,6 +316,11 @@ class Users extends BaseController
                 "but PayMongo Gateway returned {$pmResult['status_code']} ({$pmResult['error']}) after {$pmResult['retry_count']} retries ({$pmResult['latency_ms']}ms). " .
                 "You can safely retry payment from My Orders."
             );
+        }
+
+        $targetUrl = site_url('orders?tab=to_pay');
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON(['success' => true, 'redirect' => $targetUrl]);
         }
 
         return redirect()->to('/orders?tab=to_pay');
