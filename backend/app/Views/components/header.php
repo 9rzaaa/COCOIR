@@ -55,7 +55,7 @@
 
             <!-- Cart icon with badge -->
             <a href="<?= site_url('cart') ?>" class="relative p-2 text-coco-dark hover:text-coco-orange transition-colors" title="My Cart">
-                <i class="text-xl fas fa-shopping-bag"></i>
+                <i class="text-xl fas fa-shopping-cart"></i>
                 <span id="cart-count"
                     class="absolute -top-2 -right-2 bg-coco-orange text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center <?= ($cartTotal ?? 0) > 0 ? '' : 'hidden' ?>">
                     <?= $cartTotal ?? 0 ?>
@@ -109,7 +109,7 @@
                         <a href="<?= site_url('cart') ?>"
                             class="group flex items-center gap-3 hover:bg-coco-cream px-4 py-3 border-coco-sand/30 border-b text-coco-dark hover:text-coco-orange text-sm transition-colors">
                             <span class="flex flex-shrink-0 justify-center items-center bg-coco-sand/50 group-hover:bg-coco-orange/10 rounded-lg w-7 h-7 transition-colors">
-                                <i class="text-[11px] text-coco-tan group-hover:text-coco-orange transition-colors fas fa-shopping-bag"></i>
+                                <i class="text-[11px] text-coco-tan group-hover:text-coco-orange transition-colors fas fa-shopping-cart"></i>
                             </span>
                             My Cart
                             <?php if ($cartCount > 0): ?>
@@ -207,7 +207,7 @@
                         <i class="w-4 text-coco-tan text-xs fas fa-box"></i> My Orders
                     </a>
                     <a href="<?= site_url('cart') ?>" class="flex items-center gap-3 py-2.5 border-coco-sand/30 border-b text-coco-dark hover:text-coco-orange text-sm transition-colors">
-                        <i class="w-4 text-coco-tan text-xs fas fa-shopping-bag"></i> My Cart
+                        <i class="w-4 text-coco-tan text-xs fas fa-shopping-cart"></i> My Cart
                         <?php if ($cartCount > 0): ?>
                             <span class="bg-coco-orange ml-auto px-2 py-0.5 rounded-full font-black text-[10px] text-white"><?= $cartCount ?></span>
                         <?php endif; ?>

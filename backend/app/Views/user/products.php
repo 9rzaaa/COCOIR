@@ -268,7 +268,7 @@ select{appearance:none;cursor:pointer}
                     <div class="flex gap-3">
                         <button id="modal-atc"
                             class="flex-1 bg-coco-orange hover:bg-coco-dark text-white font-bold py-3 rounded-full transition-all hover:scale-105 shadow-lg text-sm flex items-center justify-center gap-2">
-                            <i class="fas fa-shopping-bag text-xs"></i> Add to Cart
+                            <i class="fas fa-shopping-cart text-xs"></i> Add to Cart
                         </button>
                         <button id="modal-wishlist"
                             class="w-11 h-11 border-2 border-coco-sand hover:border-coco-orange rounded-full flex items-center justify-center text-coco-tan hover:text-coco-orange transition-all">
@@ -479,7 +479,7 @@ function openProductModal(id) {
         atcBtn.innerHTML = '<i class="fas fa-ban text-xs"></i> Out of Stock';
     } else {
         atcBtn.classList.add('bg-coco-orange','hover:bg-coco-dark');
-        atcBtn.innerHTML = '<i class="fas fa-shopping-bag text-xs"></i> Add to Cart';
+        atcBtn.innerHTML = '<i class="fas fa-shopping-cart text-xs"></i> Add to Cart';
         atcBtn.onclick   = () => doAddToCart(p.id, p.name, p.price, p.image||'', atcBtn);
     }
 
